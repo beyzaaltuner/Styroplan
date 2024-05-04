@@ -3,7 +3,7 @@
 # Assign each job to a machine.
 # Assign each job -gene- to a unique position within its assigned machine.
 # Machine --> Dictionary: Key --> machine ID, Value --> dictionary: holds processing time for that machine.
-
+import math
 # __________FITNESS AND TARDINESS EVALUATION__________
 # Calculates the fitness of a chromosome based on the tardiness criterion --> the maximum completion time among all machines.
 # Initialize Tardiness list --> with zeros (the length of the list == the number of machines) --> finish time of each machine.
@@ -41,14 +41,7 @@
 # Iterates over each gene in the chromosome
 
 import random
-from job_creator.jobs import *
-
-
-class Job:
-    def __init__(self, job_id, processing_time, deadline):
-        self.job_id = job_id
-        self.processing_time = processing_time
-        self.deadline = deadline
+from job_creator.jobsFromDb import *
 
 
 def initialize_population(population_size, num_machines, jobs):
@@ -64,7 +57,7 @@ def initialize_population(population_size, num_machines, jobs):
             chromosome.append([job.job_id, machine, position])
         population.append(chromosome)
 
-    print(f"Initial Population: {population}")
+    #print(f"Initial Population: {population}")
     return population
 
 
@@ -72,7 +65,7 @@ def calculate_fitness(chromosome, machines):
     # Initialize variables
     machine_finish_times = [0] * len(machines)
     total_tardiness = 0
-    penalty_factor = 1000  # Adjust as needed
+    penalty_factor = 100000 # Adjust as needed
 
     # Track assigned positions on each machine
     assigned_positions = {machine: set() for machine in machines.keys()}
@@ -204,7 +197,7 @@ def genetic_algorithm(population_size, mutation_rate, max_generations, num_machi
         fitness_scores = [calculate_fitness(chromosome, machines) for chromosome in population]
 
         # Find indices of chromosomes with penalties
-        penalty_indices = [i for i, score in enumerate(fitness_scores) if score >= 1000]
+        penalty_indices = [i for i, score in enumerate(fitness_scores) if score >= 100000]
 
         # Remove chromosomes with very big fitness value from the population
         for index in sorted(penalty_indices, reverse=True):
@@ -257,11 +250,11 @@ def genetic_algorithm(population_size, mutation_rate, max_generations, num_machi
 
 
 # Example implementation
-jobs = initialize_jobs_from_database(cursor)
+jobs = jobs_list
 population_size = 1000
 mutation_rate = 0.1
 max_generations = 100
-num_machines = 3
+num_machines = 8
 
 best_solution = genetic_algorithm(population_size, mutation_rate, max_generations, num_machines, jobs)
 print("Best solution:", best_solution)
