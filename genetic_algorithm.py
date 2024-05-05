@@ -41,8 +41,6 @@
 # Iterates over each gene in the chromosome
 
 import random
-import concurrent.futures
-
 from job_creator.jobsFromDb import *
 
 def calculate_setup_time_change_KZ(previous_job, current_job):
@@ -64,6 +62,7 @@ def calculate_setup_time_change_KZ(previous_job, current_job):
              (previous_job.mold_width == 'L' and current_job.mold_width == 'S'):
             return 6
     return 0  # NO CHANGE
+
 
 def calculate_setup_time_change_XL(previous_job, current_job):
     mold_width_change = current_job.mold_width != previous_job.mold_width
@@ -112,7 +111,7 @@ def initialize_population(population_size, num_machines, jobs):
     return population
 
 
-def calculate_fitness(chromosome, machines):
+def calculate_fitness_1(chromosome, machines):
     # Initialize variables
     machine_finish_times = [0] * len(machines)
     total_tardiness = 0
@@ -148,6 +147,48 @@ def calculate_fitness(chromosome, machines):
             assigned_positions[machine].add(position)
 
     # print(f"Total tardiness of this chromosome is {total_tardiness} \n")
+
+    return total_tardiness
+
+
+def calculate_fitness(chromosome, machines):
+    # Initialize variables
+    machine_finish_times = [0] * len(machines)
+    total_tardiness = 0
+    penalty_factor = 1000  # Adjust as needed
+
+    # Track assigned positions on each machine
+    assigned_positions = {machine: set() for machine in machines.keys()}
+
+    # Sort jobs assigned to each machine based on their positions
+    sorted_solution = []
+    for machine_id in range(len(machines)):
+        jobs_on_machine = [gene for gene in chromosome if gene[1] == machine_id]
+        sorted_jobs = sorted(jobs_on_machine, key=lambda x: x[2])  # Sort based on position
+        sorted_solution.extend(sorted_jobs)
+
+    for gene in sorted_solution:
+        job_id, machine, position = gene
+        job = machines[machine][job_id]
+
+        # Check if the position is already assigned
+        if position in assigned_positions[machine]:
+            # Penalize the chromosome for assigning multiple jobs to the same position on the same machine
+            total_tardiness += penalty_factor
+        else:
+            # Update machine finish time
+            start_time = machine_finish_times[machine]
+            end_time = start_time + job.processing_time
+
+            # Check tardiness
+            job_tardiness = max(0, end_time - job.deadline)
+            total_tardiness += job_tardiness
+
+            # Update machine finish time for the next job
+            machine_finish_times[machine] = end_time
+
+            # Update assigned positions
+            assigned_positions[machine].add(position)
 
     return total_tardiness
 
@@ -312,8 +353,6 @@ def genetic_algorithm(population_size, mutation_rate, max_generations, num_machi
     return best_solution
 
 
-
-
 def calculate_start_and_end_times(best_solution, machines):
     # Sort jobs assigned to each machine based on their positions
     sorted_solution = []
@@ -338,10 +377,10 @@ def calculate_start_and_end_times(best_solution, machines):
 
         # Store start and end times for the job
         job_times[(machine_id, position)] = end_time
+        job_tardiness = max(0, end_time - job.deadline)
 
         # Print job details
-        print(f"Job {job_id}: Start Time={start_time}, End Time={end_time} on Machine {machine_id}")
-
+        print(f"Job {job_id}: Start Time={start_time}, End Time={end_time}, Tardiness={job_tardiness} on Machine {machine_id}")
 
 # Example implementation
 jobs = jobs_list_kz
