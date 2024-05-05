@@ -307,7 +307,41 @@ def genetic_algorithm(population_size, mutation_rate, max_generations, num_machi
     best_solution_index = fitness_scores.index(min(fitness_scores))
     best_solution = population[best_solution_index]
     print(f"Total tardiness in the found solution: {calculate_fitness(best_solution, machines)}")
+    calculate_start_and_end_times(best_solution, machines)
+
     return best_solution
+
+
+
+
+def calculate_start_and_end_times(best_solution, machines):
+    # Sort jobs assigned to each machine based on their positions
+    sorted_solution = []
+    for machine_id in range(len(machines)):
+        jobs_on_machine = [gene for gene in best_solution if gene[1] == machine_id]
+        sorted_jobs = sorted(jobs_on_machine, key=lambda x: x[2])  # Sort based on position
+        sorted_solution.extend(sorted_jobs)
+
+    job_times = {}  # Dictionary to store start and end times of jobs
+
+    # Iterate over each gene in the sorted solution
+    for gene in sorted_solution:
+        job_id, machine_id, position = gene
+        job = machines[machine_id][job_id]
+
+        # Calculate start time
+        previous_end_times = [job_times.get((machine_id, pos), 0) for pos in range(position)]
+        max_previous_end_time = max(previous_end_times) if previous_end_times else 0
+        start_time = max_previous_end_time
+        # Calculate end time
+        end_time = start_time + job.processing_time
+
+        # Store start and end times for the job
+        job_times[(machine_id, position)] = end_time
+
+        # Print job details
+        print(f"Job {job_id}: Start Time={start_time}, End Time={end_time} on Machine {machine_id}")
+
 
 # Example implementation
 jobs = jobs_list_kz
@@ -318,6 +352,3 @@ num_machines = 8
 
 best_solution = genetic_algorithm(population_size, mutation_rate, max_generations, num_machines, jobs)
 print("Best solution:", best_solution)
-
-
-
