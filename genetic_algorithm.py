@@ -250,7 +250,7 @@ def genetic_algorithm(population_size, mutation_rate, max_generations, num_machi
 
 
 # Example implementation
-jobs = jobs_list
+jobs = jobs_list_kz
 population_size = 1000
 mutation_rate = 0.1
 max_generations = 100

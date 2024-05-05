@@ -1,7 +1,8 @@
 import math
-
+import threading
 import pyodbc as pyodbc
 from datetime import date
+
 
 server = 'localhost\\SQLEXPRESS' 
 database = 'StyroPlanDB' 
@@ -16,7 +17,7 @@ conn = pyodbc.connect(conn_str)
 cursor = conn.cursor()
 
 erl_command = '''
-SELECT  CAST(m.PARCA_KODU AS varchar(50)) AS PARCA_KODU, m.KALIP_RAF_NO, m.ERKEK_KALIP_RAF_NO, m.TYPE, m.MAKINE, m.CYCLE_TIME, m.KALIP_GENISLIGI, s.PTARIH
+SELECT TOP 50 CAST(m.PARCA_KODU AS varchar(50)) AS PARCA_KODU, m.KALIP_RAF_NO, m.ERKEK_KALIP_RAF_NO, m.TYPE, m.MAKINE, m.CYCLE_TIME, m.KALIP_GENISLIGI, s.PTARIH
 FROM SAP_URT_SIP s
 INNER JOIN SAP_URT_BILESEN b ON CAST(b.AUFNR AS varchar(50)) = CAST(s.AUFNR AS varchar(50))
 INNER JOIN PLAN_MAKINELER m ON CAST(m.PARCA_KODU AS varchar(50)) = CAST(b.MATNR AS varchar(50))
@@ -24,7 +25,7 @@ WHERE (CAST(TYPE AS varchar(50)) = 'TOP' OR CAST(TYPE AS varchar(50)) = 'MIDDLE'
 ORDER BY CAST(s.AUFNR AS varchar(50)) ASC'''
 
 kz_command = '''
-SELECT  CAST(m.PARCA_KODU AS varchar(50)) AS PARCA_KODU, m.KALIP_RAF_NO, m.ERKEK_KALIP_RAF_NO, m.TYPE, m.MAKINE, m.CYCLE_TIME, m.KALIP_GENISLIGI, s.PTARIH
+SELECT TOP 50 CAST(m.PARCA_KODU AS varchar(50)) AS PARCA_KODU, m.KALIP_RAF_NO, m.ERKEK_KALIP_RAF_NO, m.TYPE, m.MAKINE, m.CYCLE_TIME, m.KALIP_GENISLIGI, s.PTARIH
 FROM SAP_URT_SIP s
 INNER JOIN SAP_URT_BILESEN b ON CAST(b.AUFNR AS varchar(50)) = CAST(s.AUFNR AS varchar(50))
 INNER JOIN PLAN_MAKINELER m ON CAST(m.PARCA_KODU AS varchar(50)) = CAST(b.MATNR AS varchar(50))
@@ -32,12 +33,14 @@ WHERE (CAST(TYPE AS varchar(50)) = 'TOP' OR CAST(TYPE AS varchar(50)) = 'MIDDLE'
 ORDER BY CAST(s.AUFNR AS varchar(50)) ASC'''
 
 xl_command = '''
-SELECT  CAST(m.PARCA_KODU AS varchar(50)) AS PARCA_KODU, m.KALIP_RAF_NO, m.ERKEK_KALIP_RAF_NO, m.TYPE, m.MAKINE, m.CYCLE_TIME, m.KALIP_GENISLIGI, s.PTARIH
+SELECT TOP 50 CAST(m.PARCA_KODU AS varchar(50)) AS PARCA_KODU, m.KALIP_RAF_NO, m.ERKEK_KALIP_RAF_NO, m.TYPE, m.MAKINE, m.CYCLE_TIME, m.KALIP_GENISLIGI, s.PTARIH
 FROM SAP_URT_SIP s
 INNER JOIN SAP_URT_BILESEN b ON CAST(b.AUFNR AS varchar(50)) = CAST(s.AUFNR AS varchar(50))
 INNER JOIN PLAN_MAKINELER m ON CAST(m.PARCA_KODU AS varchar(50)) = CAST(b.MATNR AS varchar(50))
 WHERE (CAST(TYPE AS varchar(50)) = 'TOP' OR CAST(TYPE AS varchar(50)) = 'MIDDLE' OR CAST(TYPE AS varchar(50)) = 'FRONT') AND  CAST(MAKINE AS varchar(50)) = 'XL'
 ORDER BY CAST(s.AUFNR AS varchar(50)) ASC'''
+
+
 class Job:
     current_job_id = 1
     def __init__(self, code, processing_time, deadline):
@@ -47,9 +50,9 @@ class Job:
         self.processing_time = processing_time
         self.deadline = deadline
         
-
-def initialize_jobs_from_database(cursor):
-    cursor.execute(erl_command)
+all_jobs =[]
+def initialize_jobs_from_database(cursor,command):
+    cursor.execute(command)
     jobs = []
     rows = cursor.fetchall()
     # Print each row
@@ -68,17 +71,21 @@ def initialize_jobs_from_database(cursor):
 
             job = Job(code, math.ceil(processing_time/24), deadline)
             jobs.append(job)
+            all_jobs.append(job)
         else:
             # Handle case where PTARIH is None (e.g., NULL in the database)
             print(f"Skipping job with code {code} because PTARIH is None.")
     return jobs
 
-jobs_list = initialize_jobs_from_database(cursor)
+jobs_list_erl = initialize_jobs_from_database(cursor, erl_command)
+jobs_list_kz = initialize_jobs_from_database(cursor, kz_command)
+jobs_list_xl = initialize_jobs_from_database(cursor, xl_command)
 
-for job in jobs_list:
+
+for job in all_jobs:
     print(f"Job ID: {job.job_id}, Code: {job.code}, Processing Time: {job.processing_time}, Deadline: {job.deadline}")
 
-job_count = len(jobs_list)
+job_count = len(all_jobs)
 print(f"Number of jobs created: {job_count}")
 
 # Close the cursor and connection
