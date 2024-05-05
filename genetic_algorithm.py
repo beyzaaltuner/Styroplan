@@ -3,7 +3,7 @@
 # Assign each job to a machine.
 # Assign each job -gene- to a unique position within its assigned machine.
 # Machine --> Dictionary: Key --> machine ID, Value --> dictionary: holds processing time for that machine.
-import math
+
 # __________FITNESS AND TARDINESS EVALUATION__________
 # Calculates the fitness of a chromosome based on the tardiness criterion --> the maximum completion time among all machines.
 # Initialize Tardiness list --> with zeros (the length of the list == the number of machines) --> finish time of each machine.
@@ -41,7 +41,58 @@ import math
 # Iterates over each gene in the chromosome
 
 import random
+import concurrent.futures
+
 from job_creator.jobsFromDb import *
+
+def calculate_setup_time_change_KZ(previous_job, current_job):
+    mold_width_change = current_job.mold_width != previous_job.mold_width
+    mold_shelf_no_change = current_job.mold_shelf_no != previous_job.mold_shelf_no
+    male_mold_shelf_no_change = current_job.male_mold_shelf_no != previous_job.male_mold_shelf_no
+
+    if mold_shelf_no_change and male_mold_shelf_no_change:
+        return 2
+    elif male_mold_shelf_no_change:
+        return 1
+    elif mold_width_change:
+        if (previous_job.mold_width == 'S' and current_job.mold_width == 'M') or \
+           (previous_job.mold_width == 'M' and current_job.mold_width == 'S') or \
+           (previous_job.mold_width == 'M' and current_job.mold_width == 'L') or \
+           (previous_job.mold_width == 'L' and current_job.mold_width == 'M'):
+            return 4
+        elif (previous_job.mold_width == 'S' and current_job.mold_width == 'L') or \
+             (previous_job.mold_width == 'L' and current_job.mold_width == 'S'):
+            return 6
+    return 0  # NO CHANGE
+
+def calculate_setup_time_change_XL(previous_job, current_job):
+    mold_width_change = current_job.mold_width != previous_job.mold_width
+    mold_shelf_no_change = current_job.mold_shelf_no != previous_job.mold_shelf_no
+    male_mold_shelf_no_change = current_job.male_mold_shelf_no != previous_job.male_mold_shelf_no
+
+    if mold_shelf_no_change and male_mold_shelf_no_change:
+        return 4
+    elif male_mold_shelf_no_change:
+        return 2
+    elif mold_width_change:
+        if (previous_job.mold_width == 'S' and current_job.mold_width == 'M') or \
+           (previous_job.mold_width == 'M' and current_job.mold_width == 'S') or \
+           (previous_job.mold_width == 'M' and current_job.mold_width == 'L') or \
+           (previous_job.mold_width == 'L' and current_job.mold_width == 'M'):
+            return 8
+        elif (previous_job.mold_width == 'S' and current_job.mold_width == 'L') or \
+             (previous_job.mold_width == 'L' and current_job.mold_width == 'S'):
+            return 12
+    return 0  # NO CHANGE
+
+def calculate_setup_time_change_ERL(previous_job, current_job):
+    mold_width_change = current_job.code != previous_job.code
+
+
+    if mold_width_change:
+        return 2
+    else:
+        return 0
 
 
 def initialize_population(population_size, num_machines, jobs):
@@ -71,7 +122,7 @@ def calculate_fitness(chromosome, machines):
     assigned_positions = {machine: set() for machine in machines.keys()}
 
     # print(f"Current chromosome: {chromosome}")
-    for gene in chromosome:
+    for i, gene in enumerate(chromosome):
         job_id, machine, position = gene
 
         # Check if the position is already assigned
@@ -79,8 +130,18 @@ def calculate_fitness(chromosome, machines):
             # Penalize the chromosome for assigning multiple jobs to the same position on the same machine
             total_tardiness += penalty_factor
         else:
+            current_job = machines[machine][job_id]
+            setup_time = 0
+
+            # if not the first job in the chromosome, should calculate the setup
+            if i > 0:
+                # Get the previous job
+                previous_gene = chromosome[i - 1]
+                previous_job = machines[previous_gene[1]][previous_gene[0]]
+                setup_time = calculate_setup_time_change_KZ(previous_job, current_job)
+
             # Update machine finish time and check tardiness
-            machine_finish_times[machine] += machines[machine][job_id].processing_time
+            machine_finish_times[machine] += machines[machine][job_id].processing_time + setup_time
             job_tardiness = max(0, machine_finish_times[machine] - machines[machine][job_id].deadline)
             total_tardiness += job_tardiness
             # Update assigned positions
@@ -248,7 +309,6 @@ def genetic_algorithm(population_size, mutation_rate, max_generations, num_machi
     print(f"Total tardiness in the found solution: {calculate_fitness(best_solution, machines)}")
     return best_solution
 
-
 # Example implementation
 jobs = jobs_list_kz
 population_size = 1000
@@ -258,3 +318,6 @@ num_machines = 8
 
 best_solution = genetic_algorithm(population_size, mutation_rate, max_generations, num_machines, jobs)
 print("Best solution:", best_solution)
+
+
+
