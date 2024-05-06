@@ -41,26 +41,31 @@
 # Iterates over each gene in the chromosome
 
 import random
+import threading
 from job_creator.jobsFromDb import *
+
 
 def calculate_setup_time_change_KZ(previous_job, current_job):
     mold_width_change = current_job.mold_width != previous_job.mold_width
     mold_shelf_no_change = current_job.mold_shelf_no != previous_job.mold_shelf_no
     male_mold_shelf_no_change = current_job.male_mold_shelf_no != previous_job.male_mold_shelf_no
 
-    if mold_shelf_no_change and male_mold_shelf_no_change:
-        return 2
-    elif male_mold_shelf_no_change:
-        return 1
-    elif mold_width_change:
+    if mold_width_change:
         if (previous_job.mold_width == 'S' and current_job.mold_width == 'M') or \
-           (previous_job.mold_width == 'M' and current_job.mold_width == 'S') or \
-           (previous_job.mold_width == 'M' and current_job.mold_width == 'L') or \
-           (previous_job.mold_width == 'L' and current_job.mold_width == 'M'):
+                (previous_job.mold_width == 'M' and current_job.mold_width == 'S') or \
+                (previous_job.mold_width == 'M' and current_job.mold_width == 'L') or \
+                (previous_job.mold_width == 'L' and current_job.mold_width == 'M'):
             return 4
         elif (previous_job.mold_width == 'S' and current_job.mold_width == 'L') or \
-             (previous_job.mold_width == 'L' and current_job.mold_width == 'S'):
+                (previous_job.mold_width == 'L' and current_job.mold_width == 'S'):
             return 6
+    else:
+        if mold_shelf_no_change:
+            return 2
+        else:
+            if male_mold_shelf_no_change:
+                return 1
+
     return 0  # NO CHANGE
 
 
@@ -69,24 +74,27 @@ def calculate_setup_time_change_XL(previous_job, current_job):
     mold_shelf_no_change = current_job.mold_shelf_no != previous_job.mold_shelf_no
     male_mold_shelf_no_change = current_job.male_mold_shelf_no != previous_job.male_mold_shelf_no
 
-    if mold_shelf_no_change and male_mold_shelf_no_change:
-        return 4
-    elif male_mold_shelf_no_change:
-        return 2
-    elif mold_width_change:
+    if mold_width_change:
         if (previous_job.mold_width == 'S' and current_job.mold_width == 'M') or \
-           (previous_job.mold_width == 'M' and current_job.mold_width == 'S') or \
-           (previous_job.mold_width == 'M' and current_job.mold_width == 'L') or \
-           (previous_job.mold_width == 'L' and current_job.mold_width == 'M'):
+                (previous_job.mold_width == 'M' and current_job.mold_width == 'S') or \
+                (previous_job.mold_width == 'M' and current_job.mold_width == 'L') or \
+                (previous_job.mold_width == 'L' and current_job.mold_width == 'M'):
             return 8
         elif (previous_job.mold_width == 'S' and current_job.mold_width == 'L') or \
-             (previous_job.mold_width == 'L' and current_job.mold_width == 'S'):
+                (previous_job.mold_width == 'L' and current_job.mold_width == 'S'):
             return 12
+    else:
+        if mold_shelf_no_change:
+            return 4
+        else:
+            if male_mold_shelf_no_change:
+                return 2
+
     return 0  # NO CHANGE
+
 
 def calculate_setup_time_change_ERL(previous_job, current_job):
     mold_width_change = current_job.code != previous_job.code
-
 
     if mold_width_change:
         return 2
@@ -115,7 +123,7 @@ def calculate_fitness_1(chromosome, machines):
     # Initialize variables
     machine_finish_times = [0] * len(machines)
     total_tardiness = 0
-    penalty_factor = 100000 # Adjust as needed
+    penalty_factor = 1000  # Adjust as needed
 
     # Track assigned positions on each machine
     assigned_positions = {machine: set() for machine in machines.keys()}
@@ -151,7 +159,7 @@ def calculate_fitness_1(chromosome, machines):
     return total_tardiness
 
 
-def calculate_fitness(chromosome, machines):
+def calculate_fitness(chromosome, machines, calculate_setup_time_func):
     # Initialize variables
     machine_finish_times = [0] * len(machines)
     total_tardiness = 0
@@ -167,7 +175,7 @@ def calculate_fitness(chromosome, machines):
         sorted_jobs = sorted(jobs_on_machine, key=lambda x: x[2])  # Sort based on position
         sorted_solution.extend(sorted_jobs)
 
-    for gene in sorted_solution:
+    for i, gene in enumerate(sorted_solution):
         job_id, machine, position = gene
         job = machines[machine][job_id]
 
@@ -176,8 +184,17 @@ def calculate_fitness(chromosome, machines):
             # Penalize the chromosome for assigning multiple jobs to the same position on the same machine
             total_tardiness += penalty_factor
         else:
+            setup_time = 0
+            if i != 0:
+                # Get the previous job
+                previous_gene = sorted_solution[i - 1]
+                previous_job = machines[previous_gene[1]][previous_gene[0]]
+                if previous_gene[1] == gene[1]:
+                    setup_time = calculate_setup_time_func(previous_job, job)
+                else:
+                    setup_time = 0
             # Update machine finish time
-            start_time = machine_finish_times[machine]
+            start_time = machine_finish_times[machine] + setup_time
             end_time = start_time + job.processing_time
 
             # Check tardiness
@@ -199,7 +216,7 @@ def crossover(parent1, parent2):
     offspring2 = [None] * len(parent2)  # [None, None, None, None, None, None, None, None]
 
     parent_string = [random.randint(0, 1) for _ in range(len(parent1))]
-    print(f"Random String: {parent_string}")
+    #print(f"Random String: {parent_string}")
 
     # Offspring1 --> Dominant parent string value : 1
     for i in range(len(parent_string)):
@@ -236,14 +253,14 @@ def crossover(parent1, parent2):
                     break
 
     # Print offsprings
-    print("Offspring 1:", offspring1)
-    print("Offspring 2:", offspring2)
+    #print("Offspring 1:", offspring1)
+    #print("Offspring 2:", offspring2)
     return offspring1, offspring2
 
 
 # Apply mutation to the chromosome (Shuffle job ids)
 def mutate(chromosome, mutation_rate):
-    print(f"Chromosome before mutation: {chromosome}")
+    #print(f"Chromosome before mutation: {chromosome}")
     mutated_chromosome = chromosome[:]
 
     job_ids = [gene[0] for gene in chromosome]
@@ -251,24 +268,24 @@ def mutate(chromosome, mutation_rate):
     if random.random() < mutation_rate:
         mutated_chromosome = []
         for gene in chromosome:
-            print(f"Mutation in progress...")
-            random_index = random.randint(0, len(job_ids)-1)
+            #print(f"Mutation in progress...")
+            random_index = random.randint(0, len(job_ids) - 1)
             job_id = job_ids[random_index]
             mutated_gene = [job_id, gene[1], gene[2]]
             job_ids.remove(job_id)
             mutated_chromosome.append(mutated_gene)
-    print(f"Chromosome after mutation: {mutated_chromosome}")
+    #print(f"Chromosome after mutation: {mutated_chromosome}")
     return mutated_chromosome
 
 
 # Apply mutation to the chromosome (Shuffle positions in the same machine)
 def mutate2(chromosome, mutation_rate):
-    print(f"Chromosome before mutation: {chromosome}")
+    #print(f"Chromosome before mutation: {chromosome}")
     mutated_chromosome = chromosome[:]
     machine_assignments = {gene[1]: [] for gene in chromosome}
 
     if random.random() < mutation_rate:
-        print(f"Mutation in progress...")
+        #print(f"Mutation in progress...")
         # Gather job positions by machine
         for gene in chromosome:
             _, machine_id, position = gene
@@ -281,40 +298,41 @@ def mutate2(chromosome, mutation_rate):
                 if gene[1] == machine_id:
                     gene[2] = positions.pop(0)  # Assign shuffled positions back to genes
 
-    print(f"Chromosome after mutation: {mutated_chromosome}")
+    #print(f"Chromosome after mutation: {mutated_chromosome}")
     return mutated_chromosome
 
 
-def genetic_algorithm(population_size, mutation_rate, max_generations, num_machines, jobs):
+def genetic_algorithm(population_size, mutation_rate, max_generations, num_machines, jobs, calculate_setup_time_func):
     population = initialize_population(population_size, num_machines, jobs)
     machines = {i: {} for i in range(num_machines)}  # {0: {}, 1: {}, 2: {}}
 
     for job in jobs:
         for machine_schedule in machines.values():
             machine_schedule[job.job_id] = job
-    print(f"Machines after filling dictionary {machines}")
+    #print(f"Machines after filling dictionary {machines}")
 
     for generation in range(max_generations):
         # Evaluate fitness
-        fitness_scores = [calculate_fitness(chromosome, machines) for chromosome in population]
+        fitness_scores = [calculate_fitness(chromosome, machines, calculate_setup_time_func) for chromosome in population]
 
         # Find indices of chromosomes with penalties
-        penalty_indices = [i for i, score in enumerate(fitness_scores) if score >= 100000]
+        penalty_indices = [i for i, score in enumerate(fitness_scores) if score >= 1000]
 
         # Remove chromosomes with very big fitness value from the population
         for index in sorted(penalty_indices, reverse=True):
             del population[index]
             del fitness_scores[index]
 
-        print(f"Population after deleting chromosomes with penalty {population}")
-        print(f"Fitness values after deleting chromosomes with penalty {fitness_scores}")
+        #print(f"Population after deleting chromosomes with penalty {population}")
+        #print(f"Fitness values after deleting chromosomes with penalty {fitness_scores}")
 
         # Perform selection
         selected_parents = [population[i] for i in sorted(range(len(population)), key=lambda x: fitness_scores[x])[:2]]
-        print(f"Selected parents: {selected_parents}")
+        #print(f"Selected parents: {selected_parents}")
 
         # Check parents' fitness values
-        print(f"Fitness values of parents: \nParent 1: {calculate_fitness(selected_parents[0], machines)}\nParent 2: {calculate_fitness(selected_parents[1], machines)}")
+        print(
+            f"Fitness values of parents: \nParent 1: {calculate_fitness(selected_parents[0], machines,calculate_setup_time_func)}\nParent 2: {calculate_fitness(selected_parents[1], machines,calculate_setup_time_func)}")
 
         # Perform crossover
         parent1 = selected_parents[0]
@@ -337,8 +355,8 @@ def genetic_algorithm(population_size, mutation_rate, max_generations, num_machi
         if child2 not in population:
             population.append(child2)
 
-        print(f"Population after mutation is performed {population}")
-        print(f"Fitness values after mutation is performed {fitness_scores}")
+        #print(f"Population after mutation is performed {population}")
+        #print(f"Fitness values after mutation is performed {fitness_scores}")
 
         # Termination condition
         if 0 in fitness_scores:
@@ -347,13 +365,13 @@ def genetic_algorithm(population_size, mutation_rate, max_generations, num_machi
     # Return the best solution found
     best_solution_index = fitness_scores.index(min(fitness_scores))
     best_solution = population[best_solution_index]
-    print(f"Total tardiness in the found solution: {calculate_fitness(best_solution, machines)}")
-    calculate_start_and_end_times(best_solution, machines)
+    print(f"Total tardiness in the found solution: {calculate_fitness(best_solution, machines,calculate_setup_time_func)}")
+    calculate_start_and_end_times(best_solution, machines,calculate_setup_time_func)
 
     return best_solution
 
 
-def calculate_start_and_end_times(best_solution, machines):
+def calculate_start_and_end_times(best_solution, machines, calculate_setup_time_func):
     # Sort jobs assigned to each machine based on their positions
     sorted_solution = []
     for machine_id in range(len(machines)):
@@ -364,30 +382,57 @@ def calculate_start_and_end_times(best_solution, machines):
     job_times = {}  # Dictionary to store start and end times of jobs
 
     # Iterate over each gene in the sorted solution
-    for gene in sorted_solution:
+    for i, gene in enumerate(sorted_solution):
         job_id, machine_id, position = gene
         job = machines[machine_id][job_id]
+        setup_time = 0
+        if i != 0:
+            # Get the previous job
+            previous_gene = sorted_solution[i - 1]
+            previous_job = machines[previous_gene[1]][previous_gene[0]]
+            if previous_gene[1] == gene[1]:
+                setup_time = calculate_setup_time_func(previous_job, job)
+            else:
+                setup_time = 0
 
         # Calculate start time
         previous_end_times = [job_times.get((machine_id, pos), 0) for pos in range(position)]
         max_previous_end_time = max(previous_end_times) if previous_end_times else 0
-        start_time = max_previous_end_time
+        start_time = max_previous_end_time + setup_time
         # Calculate end time
         end_time = start_time + job.processing_time
-
         # Store start and end times for the job
         job_times[(machine_id, position)] = end_time
         job_tardiness = max(0, end_time - job.deadline)
 
         # Print job details
-        print(f"Job {job_id}: Start Time={start_time}, End Time={end_time}, Tardiness={job_tardiness} on Machine {machine_id}")
+        print(
+            f"Job {job_id}: Start Time={start_time}, End Time={end_time}, Tardiness={job_tardiness} on Machine {machine_id}")
 
-# Example implementation
-jobs = jobs_list_kz
+
 population_size = 1000
 mutation_rate = 0.1
 max_generations = 100
-num_machines = 8
 
-best_solution = genetic_algorithm(population_size, mutation_rate, max_generations, num_machines, jobs)
-print("Best solution:", best_solution)
+num_machines_erl = 3
+num_machines_kz = 8
+num_machines_xl = 4
+# Example implementation
+jobs_erl = jobs_list_erl
+jobs_kz = jobs_list_kz
+jobs_xl = jobs_list_xl
+
+best_solution_erl = genetic_algorithm(population_size, mutation_rate, max_generations, num_machines_erl, jobs_erl,calculate_setup_time_change_ERL)
+print("Best solution for ERL:", best_solution_erl)
+best_solution_kz = genetic_algorithm(population_size, mutation_rate, max_generations, num_machines_kz, jobs_kz,calculate_setup_time_change_KZ)
+print("Best solution for KZ:", best_solution_kz)
+best_solution_xl= genetic_algorithm(population_size, mutation_rate, max_generations, num_machines_xl, jobs_xl, calculate_setup_time_change_XL)
+print("Best solution for XL:", best_solution_xl)
+
+
+
+
+
+
+
+
