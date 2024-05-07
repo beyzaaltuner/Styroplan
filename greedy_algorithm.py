@@ -1,12 +1,4 @@
-class Job:
-    def __init__(self, job_id, processing_time, deadline):
-        self.job_id = job_id
-        self.processing_time = processing_time
-        self.deadline = deadline
-        self.job_finish_time = None
-
-    def __str__(self):
-        return str(self.job_id) + " "
+from job_creator.jobsFromDb import *
 
 class Machine:
     machine_id_count = 0  # To generate unique machine IDs
@@ -26,11 +18,7 @@ class Machine:
 def greedy_algorithm(jobs, num_machines):
     machines = [Machine() for _ in range(num_machines)]  # Initialize machines
 
-    initial_jobs = [
-        Job(6, 2, 5),
-        Job(7, 4, 6),
-        Job(8, 1, 3)
-    ]
+    initial_jobs = initial_jobs_erl
 
     # Initially each machine has a job assigned
     for i, job in enumerate(initial_jobs[:num_machines]):
@@ -46,7 +34,7 @@ def greedy_algorithm(jobs, num_machines):
 
     print("Jobs after being sorted by deadlines:")
     for j in jobs:
-        print(j.__str__())
+        print(j.job_id)
 
 
     # Assign jobs to machines considering workload balance
@@ -63,7 +51,7 @@ def greedy_algorithm(jobs, num_machines):
         min_finish_time_machine.jobs_queue.append(job)
         job.job_finish_time = min_finish_time_machine.finish_time
 
-        print(f"Job {job.__str__()} has the finish time of: {job.job_finish_time} and its deadline is: {job.deadline}")
+        print(f"Job {job.job_id} has the finish time of: {job.job_finish_time} and its deadline is: {job.deadline}")
 
 
     # Calculate tardiness
@@ -77,23 +65,11 @@ def greedy_algorithm(jobs, num_machines):
     return total_tardiness, machines
 
 
-jobs = [
-    Job(1, 3, 6),
-    Job(2, 4, 8),
-    Job(3, 2, 7),
-    Job(4, 5, 10),
-    Job(5, 1, 5)
-]
+jobs = jobs_list_erl
 
-jobs2 = [
-    Job(1, 3, 5),
-    Job(2, 4, 6),
-    Job(3, 2, 8),
-    Job(4, 5, 7),
-    Job(5, 1, 5)
-]
+
 number_of_machines = 3
-total_tardiness, machines = greedy_algorithm(jobs2, number_of_machines)
+total_tardiness, machines = greedy_algorithm(jobs, number_of_machines)
 print("Total tardiness", total_tardiness)
 print("Jobs in machines: ")
 for machine in machines:

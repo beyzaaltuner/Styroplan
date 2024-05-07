@@ -54,6 +54,13 @@ class Job:
 
 
 all_jobs = []
+initial_jobs_erl = [
+        Job(23575831, 383, 383, 4, 'ERL', 4),
+        Job(23575831, 383, 383, 4, 'ERL', 2),
+        Job(23575831, 383, 383, 4, 'ERL', 5),
+        Job(23575831, 383, 383, 4, 'ERL', 18),
+        Job(23575831, 383, 383,4,'ERL',15)
+    ]
 
 
 def initialize_jobs_from_database(cursor, command):
@@ -75,9 +82,9 @@ def initialize_jobs_from_database(cursor, command):
             # Calculate deadline based on the difference between today's date and date from the database
             today = date(2024, 3, 5)
             difference_in_days = (date_from_db.date() - today).days
-            deadline = difference_in_days + 1
+            deadline = (difference_in_days + 1) * 1440
 
-            job = Job(code, mold_shelf_no, male_mold_shelf_no, math.ceil(processing_time / 24), mold_width,
+            job = Job(code, mold_shelf_no, male_mold_shelf_no, math.ceil(processing_time / 60), mold_width,
                       deadline)
             jobs.append(job)
             all_jobs.append(job)
@@ -91,9 +98,14 @@ jobs_list_erl = initialize_jobs_from_database(cursor, erl_command)
 jobs_list_kz = initialize_jobs_from_database(cursor, kz_command)
 jobs_list_xl = initialize_jobs_from_database(cursor, xl_command)
 
+for job in initial_jobs_erl:
+    print(
+        f"Job ID: {job.job_id}, Code: {job.code}, Mold Shelf No: {job.mold_shelf_no}, Male Mold Shelf No: {job.male_mold_shelf_no}, Processing Time: {job.processing_time}, Mold Width: {job.mold_width}, Deadline: {job.deadline}")
+
 for job in all_jobs:
     print(
         f"Job ID: {job.job_id}, Code: {job.code}, Mold Shelf No: {job.mold_shelf_no}, Male Mold Shelf No: {job.male_mold_shelf_no}, Processing Time: {job.processing_time}, Mold Width: {job.mold_width}, Deadline: {job.deadline}")
+
 
 job_count = len(all_jobs)
 print(f"Number of jobs created: {job_count}")
