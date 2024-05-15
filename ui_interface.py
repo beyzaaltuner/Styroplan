@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'interfaceitqXPQ.ui'
+## Form generated from reading UI file 'interfaceoRLRsN.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.0
 ##
@@ -444,7 +444,8 @@ class Ui_MainWindow(object):
         self.tableView = QTableView(self.unplanned_orders)
         self.tableView.setObjectName(u"tableView")
         self.tableView.setStyleSheet(u"")
-        self.tableView.horizontalHeader().setMinimumSectionSize(150)
+        self.tableView.horizontalHeader().setMinimumSectionSize(250)
+        self.tableView.horizontalHeader().setDefaultSectionSize(250)
 
         self.horizontalLayout_7.addWidget(self.tableView)
 
@@ -1008,7 +1009,8 @@ class Ui_MainWindow(object):
         self.KZ_1_table_view.setObjectName(u"KZ_1_table_view")
         self.KZ_1_table_view.setMinimumSize(QSize(0, 300))
         self.KZ_1_table_view.setStyleSheet(u"")
-        self.KZ_1_table_view.horizontalHeader().setMinimumSectionSize(150)
+        self.KZ_1_table_view.horizontalHeader().setMinimumSectionSize(200)
+        self.KZ_1_table_view.horizontalHeader().setDefaultSectionSize(200)
 
         self.verticalLayout_41.addWidget(self.KZ_1_table_view)
 
@@ -1028,7 +1030,8 @@ class Ui_MainWindow(object):
         self.KZ_2_table_view = QTableView(self.scrollAreaWidgetContents_5)
         self.KZ_2_table_view.setObjectName(u"KZ_2_table_view")
         self.KZ_2_table_view.setMinimumSize(QSize(0, 300))
-        self.KZ_2_table_view.horizontalHeader().setMinimumSectionSize(150)
+        self.KZ_2_table_view.horizontalHeader().setMinimumSectionSize(200)
+        self.KZ_2_table_view.horizontalHeader().setDefaultSectionSize(200)
 
         self.verticalLayout_42.addWidget(self.KZ_2_table_view)
 
@@ -1046,7 +1049,8 @@ class Ui_MainWindow(object):
         self.KZ_3_table_view = QTableView(self.scrollAreaWidgetContents_5)
         self.KZ_3_table_view.setObjectName(u"KZ_3_table_view")
         self.KZ_3_table_view.setMinimumSize(QSize(0, 300))
-        self.KZ_3_table_view.horizontalHeader().setMinimumSectionSize(150)
+        self.KZ_3_table_view.horizontalHeader().setMinimumSectionSize(200)
+        self.KZ_3_table_view.horizontalHeader().setDefaultSectionSize(200)
 
         self.verticalLayout_43.addWidget(self.KZ_3_table_view)
 
@@ -1064,7 +1068,8 @@ class Ui_MainWindow(object):
         self.KZ_4_table_view = QTableView(self.scrollAreaWidgetContents_5)
         self.KZ_4_table_view.setObjectName(u"KZ_4_table_view")
         self.KZ_4_table_view.setMinimumSize(QSize(0, 300))
-        self.KZ_4_table_view.horizontalHeader().setMinimumSectionSize(150)
+        self.KZ_4_table_view.horizontalHeader().setMinimumSectionSize(200)
+        self.KZ_4_table_view.horizontalHeader().setDefaultSectionSize(200)
 
         self.verticalLayout_44.addWidget(self.KZ_4_table_view)
 
@@ -1082,7 +1087,8 @@ class Ui_MainWindow(object):
         self.KZ_5_table_view = QTableView(self.scrollAreaWidgetContents_5)
         self.KZ_5_table_view.setObjectName(u"KZ_5_table_view")
         self.KZ_5_table_view.setMinimumSize(QSize(0, 300))
-        self.KZ_5_table_view.horizontalHeader().setMinimumSectionSize(150)
+        self.KZ_5_table_view.horizontalHeader().setMinimumSectionSize(200)
+        self.KZ_5_table_view.horizontalHeader().setDefaultSectionSize(200)
 
         self.verticalLayout_45.addWidget(self.KZ_5_table_view)
 
@@ -1100,7 +1106,8 @@ class Ui_MainWindow(object):
         self.KZ_6_table_view = QTableView(self.scrollAreaWidgetContents_5)
         self.KZ_6_table_view.setObjectName(u"KZ_6_table_view")
         self.KZ_6_table_view.setMinimumSize(QSize(0, 300))
-        self.KZ_6_table_view.horizontalHeader().setMinimumSectionSize(150)
+        self.KZ_6_table_view.horizontalHeader().setMinimumSectionSize(200)
+        self.KZ_6_table_view.horizontalHeader().setDefaultSectionSize(200)
 
         self.verticalLayout_46.addWidget(self.KZ_6_table_view)
 
@@ -1118,7 +1125,8 @@ class Ui_MainWindow(object):
         self.KZ_7_table_view = QTableView(self.scrollAreaWidgetContents_5)
         self.KZ_7_table_view.setObjectName(u"KZ_7_table_view")
         self.KZ_7_table_view.setMinimumSize(QSize(0, 300))
-        self.KZ_7_table_view.horizontalHeader().setMinimumSectionSize(150)
+        self.KZ_7_table_view.horizontalHeader().setMinimumSectionSize(200)
+        self.KZ_7_table_view.horizontalHeader().setDefaultSectionSize(200)
 
         self.verticalLayout_47.addWidget(self.KZ_7_table_view)
 
@@ -1136,7 +1144,8 @@ class Ui_MainWindow(object):
         self.KZ_8_table_view = QTableView(self.scrollAreaWidgetContents_5)
         self.KZ_8_table_view.setObjectName(u"KZ_8_table_view")
         self.KZ_8_table_view.setMinimumSize(QSize(0, 300))
-        self.KZ_8_table_view.horizontalHeader().setMinimumSectionSize(150)
+        self.KZ_8_table_view.horizontalHeader().setMinimumSectionSize(200)
+        self.KZ_8_table_view.horizontalHeader().setDefaultSectionSize(200)
 
         self.verticalLayout_48.addWidget(self.KZ_8_table_view)
 
@@ -1154,7 +1163,8 @@ class Ui_MainWindow(object):
         self.KZ_XL_1_table_view = QTableView(self.scrollAreaWidgetContents_5)
         self.KZ_XL_1_table_view.setObjectName(u"KZ_XL_1_table_view")
         self.KZ_XL_1_table_view.setMinimumSize(QSize(0, 300))
-        self.KZ_XL_1_table_view.horizontalHeader().setMinimumSectionSize(150)
+        self.KZ_XL_1_table_view.horizontalHeader().setMinimumSectionSize(200)
+        self.KZ_XL_1_table_view.horizontalHeader().setDefaultSectionSize(200)
 
         self.verticalLayout_49.addWidget(self.KZ_XL_1_table_view)
 
@@ -1172,7 +1182,8 @@ class Ui_MainWindow(object):
         self.KZ_XL_2_table_view = QTableView(self.scrollAreaWidgetContents_5)
         self.KZ_XL_2_table_view.setObjectName(u"KZ_XL_2_table_view")
         self.KZ_XL_2_table_view.setMinimumSize(QSize(0, 300))
-        self.KZ_XL_2_table_view.horizontalHeader().setMinimumSectionSize(150)
+        self.KZ_XL_2_table_view.horizontalHeader().setMinimumSectionSize(200)
+        self.KZ_XL_2_table_view.horizontalHeader().setDefaultSectionSize(200)
 
         self.verticalLayout_50.addWidget(self.KZ_XL_2_table_view)
 
@@ -1190,7 +1201,8 @@ class Ui_MainWindow(object):
         self.KZ_XL_3_table_view = QTableView(self.scrollAreaWidgetContents_5)
         self.KZ_XL_3_table_view.setObjectName(u"KZ_XL_3_table_view")
         self.KZ_XL_3_table_view.setMinimumSize(QSize(0, 300))
-        self.KZ_XL_3_table_view.horizontalHeader().setMinimumSectionSize(150)
+        self.KZ_XL_3_table_view.horizontalHeader().setMinimumSectionSize(200)
+        self.KZ_XL_3_table_view.horizontalHeader().setDefaultSectionSize(200)
 
         self.verticalLayout_51.addWidget(self.KZ_XL_3_table_view)
 
@@ -1208,7 +1220,8 @@ class Ui_MainWindow(object):
         self.KZ_XL_4_table_view = QTableView(self.scrollAreaWidgetContents_5)
         self.KZ_XL_4_table_view.setObjectName(u"KZ_XL_4_table_view")
         self.KZ_XL_4_table_view.setMinimumSize(QSize(0, 300))
-        self.KZ_XL_4_table_view.horizontalHeader().setMinimumSectionSize(150)
+        self.KZ_XL_4_table_view.horizontalHeader().setMinimumSectionSize(200)
+        self.KZ_XL_4_table_view.horizontalHeader().setDefaultSectionSize(200)
 
         self.verticalLayout_52.addWidget(self.KZ_XL_4_table_view)
 
@@ -1226,7 +1239,8 @@ class Ui_MainWindow(object):
         self.ERL_1_table_view = QTableView(self.scrollAreaWidgetContents_5)
         self.ERL_1_table_view.setObjectName(u"ERL_1_table_view")
         self.ERL_1_table_view.setMinimumSize(QSize(0, 300))
-        self.ERL_1_table_view.horizontalHeader().setMinimumSectionSize(150)
+        self.ERL_1_table_view.horizontalHeader().setMinimumSectionSize(200)
+        self.ERL_1_table_view.horizontalHeader().setDefaultSectionSize(200)
 
         self.verticalLayout_53.addWidget(self.ERL_1_table_view)
 
@@ -1244,7 +1258,8 @@ class Ui_MainWindow(object):
         self.ERL_2_table_view = QTableView(self.scrollAreaWidgetContents_5)
         self.ERL_2_table_view.setObjectName(u"ERL_2_table_view")
         self.ERL_2_table_view.setMinimumSize(QSize(0, 300))
-        self.ERL_2_table_view.horizontalHeader().setMinimumSectionSize(150)
+        self.ERL_2_table_view.horizontalHeader().setMinimumSectionSize(200)
+        self.ERL_2_table_view.horizontalHeader().setDefaultSectionSize(200)
 
         self.verticalLayout_54.addWidget(self.ERL_2_table_view)
 
@@ -1262,7 +1277,8 @@ class Ui_MainWindow(object):
         self.ERL_3_table_view = QTableView(self.scrollAreaWidgetContents_5)
         self.ERL_3_table_view.setObjectName(u"ERL_3_table_view")
         self.ERL_3_table_view.setMinimumSize(QSize(0, 300))
-        self.ERL_3_table_view.horizontalHeader().setMinimumSectionSize(150)
+        self.ERL_3_table_view.horizontalHeader().setMinimumSectionSize(200)
+        self.ERL_3_table_view.horizontalHeader().setDefaultSectionSize(200)
 
         self.verticalLayout_55.addWidget(self.ERL_3_table_view)
 
@@ -2033,7 +2049,7 @@ class Ui_MainWindow(object):
         self.type_fltr_label_btn.toggled.connect(self.type_fltr_icon_btn.setChecked)
         self.type_fltr_icon_btn.toggled.connect(self.type_fltr_label_btn.setChecked)
 
-        self.stackedWidget.setCurrentIndex(4)
+        self.stackedWidget.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
