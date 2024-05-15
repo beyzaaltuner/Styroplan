@@ -1,0 +1,25 @@
+<RCC>
+  <qresource prefix="icons">
+    <file>icons/down-arrow.png</file>
+    <file>icons/vestel_logo_cropped.png</file>
+    <file>icons/vestel_logo.png</file>
+    <file>icons/minus-red.png</file>
+    <file>icons/planned-red.png</file>
+    <file>icons/planned-white.png</file>
+    <file>icons/unplanned-red.png</file>
+    <file>icons/unplanned-white.png</file>
+    <file>icons/planning-red.png</file>
+    <file>icons/plus-red.png</file>
+    <file>icons/search-red.png</file>
+    <file>icons/stock-status-red.png</file>
+    <file>icons/menu.png</file>
+    <file>icons/planning.png</file>
+    <file>icons/planning-colored.png</file>
+    <file>icons/stock-status-colored.png</file>
+    <file>icons/logo.png</file>
+    <file>icons/minus.png</file>
+    <file>icons/plus.png</file>
+    <file>icons/search.png</file>
+    <file>icons/stock-status.png</file>
+  </qresource>
+</RCC>

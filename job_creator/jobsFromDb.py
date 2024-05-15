@@ -14,29 +14,33 @@ conn_str = (
 conn = pyodbc.connect(conn_str)
 cursor = conn.cursor()
 
+
+
 erl_command = '''
-SELECT TOP 50 CAST(m.PARCA_KODU AS varchar(50)) AS PARCA_KODU, m.KALIP_RAF_NO, m.ERKEK_KALIP_RAF_NO, m.TYPE, m.MAKINE, m.CYCLE_TIME, m.KALIP_GENISLIGI, s.PTARIH
+SELECT CAST(m.PARCA_KODU AS varchar(50)) AS PARCA_KODU, m.KALIP_RAF_NO, m.ERKEK_KALIP_RAF_NO, m.TYPE, m.MAKINE, m.CYCLE_TIME, m.KALIP_GENISLIGI, s.PTARIH
 FROM SAP_URT_SIP s
 INNER JOIN SAP_URT_BILESEN b ON CAST(b.AUFNR AS varchar(50)) = CAST(s.AUFNR AS varchar(50))
 INNER JOIN PLAN_MAKINELER m ON CAST(m.PARCA_KODU AS varchar(50)) = CAST(b.MATNR AS varchar(50))
 WHERE (CAST(TYPE AS varchar(50)) = 'TOP' OR CAST(TYPE AS varchar(50)) = 'MIDDLE' OR CAST(TYPE AS varchar(50)) = 'FRONT') AND  CAST(MAKINE AS varchar(50)) = '870'
-ORDER BY CAST(s.AUFNR AS varchar(50)) ASC'''
+'''
+
+
 
 kz_command = '''
-SELECT TOP 8 CAST(m.PARCA_KODU AS varchar(50)) AS PARCA_KODU, m.KALIP_RAF_NO, m.ERKEK_KALIP_RAF_NO, m.TYPE, m.MAKINE, m.CYCLE_TIME, m.KALIP_GENISLIGI, s.PTARIH
+SELECT CAST(m.PARCA_KODU AS varchar(50)) AS PARCA_KODU, m.KALIP_RAF_NO, m.ERKEK_KALIP_RAF_NO, m.TYPE, m.MAKINE, m.CYCLE_TIME, m.KALIP_GENISLIGI, s.PTARIH
 FROM SAP_URT_SIP s
 INNER JOIN SAP_URT_BILESEN b ON CAST(b.AUFNR AS varchar(50)) = CAST(s.AUFNR AS varchar(50))
 INNER JOIN PLAN_MAKINELER m ON CAST(m.PARCA_KODU AS varchar(50)) = CAST(b.MATNR AS varchar(50))
 WHERE (CAST(TYPE AS varchar(50)) = 'TOP' OR CAST(TYPE AS varchar(50)) = 'MIDDLE' OR CAST(TYPE AS varchar(50)) = 'FRONT') AND  CAST(MAKINE AS varchar(50)) = 'KZ'
-ORDER BY CAST(s.AUFNR AS varchar(50)) ASC'''
+'''
 
 xl_command = '''
-SELECT TOP 8 CAST(m.PARCA_KODU AS varchar(50)) AS PARCA_KODU, m.KALIP_RAF_NO, m.ERKEK_KALIP_RAF_NO, m.TYPE, m.MAKINE, m.CYCLE_TIME, m.KALIP_GENISLIGI, s.PTARIH
+SELECT CAST(m.PARCA_KODU AS varchar(50)) AS PARCA_KODU, m.KALIP_RAF_NO, m.ERKEK_KALIP_RAF_NO, m.TYPE, m.MAKINE, m.CYCLE_TIME, m.KALIP_GENISLIGI, s.PTARIH
 FROM SAP_URT_SIP s
 INNER JOIN SAP_URT_BILESEN b ON CAST(b.AUFNR AS varchar(50)) = CAST(s.AUFNR AS varchar(50))
 INNER JOIN PLAN_MAKINELER m ON CAST(m.PARCA_KODU AS varchar(50)) = CAST(b.MATNR AS varchar(50))
 WHERE (CAST(TYPE AS varchar(50)) = 'TOP' OR CAST(TYPE AS varchar(50)) = 'MIDDLE' OR CAST(TYPE AS varchar(50)) = 'FRONT') AND  CAST(MAKINE AS varchar(50)) = 'XL'
-ORDER BY CAST(s.AUFNR AS varchar(50)) ASC'''
+'''
 
 
 class Job:
@@ -54,14 +58,6 @@ class Job:
 
 
 all_jobs = []
-initial_jobs_erl = [
-        Job(23575831, 383, 383, 4, 'ERL', 4),
-        Job(23575831, 383, 383, 4, 'ERL', 2),
-        Job(23575831, 383, 383, 4, 'ERL', 5),
-        Job(23575831, 383, 383, 4, 'ERL', 18),
-        Job(23575831, 383, 383,4,'ERL',15)
-    ]
-
 
 def initialize_jobs_from_database(cursor, command):
     cursor.execute(command)
@@ -98,9 +94,6 @@ jobs_list_erl = initialize_jobs_from_database(cursor, erl_command)
 jobs_list_kz = initialize_jobs_from_database(cursor, kz_command)
 jobs_list_xl = initialize_jobs_from_database(cursor, xl_command)
 
-for job in initial_jobs_erl:
-    print(
-        f"Job ID: {job.job_id}, Code: {job.code}, Mold Shelf No: {job.mold_shelf_no}, Male Mold Shelf No: {job.male_mold_shelf_no}, Processing Time: {job.processing_time}, Mold Width: {job.mold_width}, Deadline: {job.deadline}")
 
 for job in all_jobs:
     print(
