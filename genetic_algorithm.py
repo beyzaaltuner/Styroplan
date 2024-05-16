@@ -42,6 +42,7 @@
 
 import random
 import threading
+from collections import defaultdict
 from job_creator.jobsFromDb import *
 
 
@@ -304,71 +305,55 @@ def mutate2(chromosome, mutation_rate):
 
 def genetic_algorithm(population_size, mutation_rate, max_generations, num_machines, jobs, calculate_setup_time_func):
     population = initialize_population(population_size, num_machines, jobs)
-    machines = {i: {} for i in range(num_machines)}  # {0: {}, 1: {}, 2: {}}
+    machines = {i: {} for i in range(num_machines)}
 
     for job in jobs:
         for machine_schedule in machines.values():
             machine_schedule[job.job_id] = job
-    #print(f"Machines after filling dictionary {machines}")
 
     for generation in range(max_generations):
-        # Evaluate fitness
-        fitness_scores = [calculate_fitness(chromosome, machines, calculate_setup_time_func) for chromosome in population]
+        fitness_scores = [calculate_fitness(chromosome, machines, calculate_setup_time_func) for chromosome in
+                          population]
 
-        # Find indices of chromosomes with penalties
         penalty_indices = [i for i, score in enumerate(fitness_scores) if score >= 1000]
-
-        # Remove chromosomes with very big fitness value from the population
         for index in sorted(penalty_indices, reverse=True):
             del population[index]
             del fitness_scores[index]
 
-        #print(f"Population after deleting chromosomes with penalty {population}")
-        #print(f"Fitness values after deleting chromosomes with penalty {fitness_scores}")
-
-        # Perform selection
         selected_parents = [population[i] for i in sorted(range(len(population)), key=lambda x: fitness_scores[x])[:2]]
-        #print(f"Selected parents: {selected_parents}")
 
-        # Check parents' fitness values
-        print(
-            f"Fitness values of parents: \nParent 1: {calculate_fitness(selected_parents[0], machines,calculate_setup_time_func)}\nParent 2: {calculate_fitness(selected_parents[1], machines,calculate_setup_time_func)}")
-
-        # Perform crossover
-        parent1 = selected_parents[0]
-        parent2 = selected_parents[1]
+        parent1, parent2 = selected_parents[0], selected_parents[1]
         child1, child2 = crossover(parent1, parent2)
+
         if child1 not in population:
             population.append(child1)
-
         if child2 not in population:
             population.append(child2)
 
-        # Apply mutation to the offspring chromosomes
         child1 = mutate2(child1, mutation_rate)
         child2 = mutate2(child2, mutation_rate)
 
-        # Add mutated offspring to the population if they are not already present
         if child1 not in population:
             population.append(child1)
-
         if child2 not in population:
             population.append(child2)
 
-        #print(f"Population after mutation is performed {population}")
-        #print(f"Fitness values after mutation is performed {fitness_scores}")
-
-        # Termination condition
         if 0 in fitness_scores:
             break
 
-    # Return the best solution found
     best_solution_index = fitness_scores.index(min(fitness_scores))
     best_solution = population[best_solution_index]
-    print(f"Total tardiness in the found solution: {calculate_fitness(best_solution, machines,calculate_setup_time_func)}")
-    calculate_start_and_end_times(best_solution, machines,calculate_setup_time_func)
+    print(
+        f"Total tardiness in the found solution: {calculate_fitness(best_solution, machines, calculate_setup_time_func)}")
 
-    return best_solution
+    job_times = calculate_start_and_end_times(best_solution, machines, calculate_setup_time_func)
+
+    return best_solution, job_times  # Return both the best solution and job times
+
+    # Example implementation
+
+
+
 
 
 def calculate_start_and_end_times(best_solution, machines, calculate_setup_time_func):
@@ -380,34 +365,34 @@ def calculate_start_and_end_times(best_solution, machines, calculate_setup_time_
         sorted_solution.extend(sorted_jobs)
 
     job_times = {}  # Dictionary to store start and end times of jobs
+    machine_finish_times = [0] * len(machines)  # Initialize finish times for each machine
 
     # Iterate over each gene in the sorted solution
     for i, gene in enumerate(sorted_solution):
         job_id, machine_id, position = gene
         job = machines[machine_id][job_id]
         setup_time = 0
+
         if i != 0:
             # Get the previous job
             previous_gene = sorted_solution[i - 1]
             previous_job = machines[previous_gene[1]][previous_gene[0]]
             if previous_gene[1] == gene[1]:
                 setup_time = calculate_setup_time_func(previous_job, job)
-            else:
-                setup_time = 0
 
-        # Calculate start time
-        previous_end_times = [job_times.get((machine_id, pos), 0) for pos in range(position)]
-        max_previous_end_time = max(previous_end_times) if previous_end_times else 0
-        start_time = max_previous_end_time + setup_time
-        # Calculate end time
+        start_time = machine_finish_times[machine_id] + setup_time
         end_time = start_time + job.processing_time
-        # Store start and end times for the job
-        job_times[(machine_id, position)] = end_time
+        machine_finish_times[machine_id] = end_time  # Update machine finish time
+
+        job_times[(machine_id, position)] = (start_time, end_time, job_id)
         job_tardiness = max(0, end_time - job.deadline)
 
         # Print job details
-        print(
-            f"Job {job_id}: Start Time={start_time}, End Time={end_time}, Tardiness={job_tardiness} on Machine {machine_id}")
+        print(f"Job {job_id}: Start Time={start_time}, End Time={end_time}, Tardiness={job_tardiness} on Machine {machine_id}")
+
+    return job_times
+
+
 
 
 population_size = 1000
@@ -422,12 +407,24 @@ jobs_erl = jobs_list_erl
 jobs_kz = jobs_list_kz
 jobs_xl = jobs_list_xl
 
-best_solution_erl = genetic_algorithm(population_size, mutation_rate, max_generations, num_machines_erl, jobs_erl,calculate_setup_time_change_ERL)
+best_solution_erl, job_times_erl = genetic_algorithm(population_size, mutation_rate, max_generations, num_machines_erl,
+                                                     jobs_erl, calculate_setup_time_change_ERL)
 print("Best solution for ERL:", best_solution_erl)
-best_solution_kz = genetic_algorithm(population_size, mutation_rate, max_generations, num_machines_kz, jobs_kz,calculate_setup_time_change_KZ)
+print("Job times for ERL:", job_times_erl)
+
+best_solution_kz, job_times_kz = genetic_algorithm(population_size, mutation_rate, max_generations, num_machines_kz,
+                                                   jobs_kz, calculate_setup_time_change_KZ)
 print("Best solution for KZ:", best_solution_kz)
-best_solution_xl= genetic_algorithm(population_size, mutation_rate, max_generations, num_machines_xl, jobs_xl, calculate_setup_time_change_XL)
+print("Job times for KZ:", job_times_kz)
+
+best_solution_xl, job_times_xl = genetic_algorithm(population_size, mutation_rate, max_generations, num_machines_xl,
+                                                   jobs_xl, calculate_setup_time_change_XL)
 print("Best solution for XL:", best_solution_xl)
+print("Job times for XL:", job_times_xl)
+
+
+
+
 
 
 

@@ -2,12 +2,15 @@ from PySide6.QtCore import Qt, QEvent, QDate, QDataStream, QIODevice, QAbstractI
 from PySide6.QtWidgets import QWidget, QMainWindow, QPushButton, QCheckBox, QCalendarWidget, QTableWidget, QTableView
 from PySide6.QtGui import QTextCharFormat, QStandardItemModel, QStandardItem
 
+from genetic_algorithm import genetic_algorithm, num_machines_xl, population_size, mutation_rate, max_generations, \
+    jobs_xl, calculate_setup_time_change_XL
 from ui_interface import Ui_MainWindow
 
 import pyodbc as pyodbc
+from job_creator.jobsFromDb import *
 
-server = 'DESKTOP-O7AA9QL'
-database = 'GradProjectDB'
+server = 'localhost\\SQLEXPRESS'
+database = 'StyroPlanDB'
 
 conn_str = (
     f'DRIVER={{SQL Server}};'
@@ -142,12 +145,25 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         #Implementing sorting
         self.planlanmamis_combobox.currentTextChanged.connect(self.get_selected_order_planlanmamis)
         self.planlanmis_combobox.currentTextChanged.connect(self.get_selected_order_planlanmis)
+        best_solution_xl, job_times_xl = genetic_algorithm(population_size, mutation_rate, max_generations,
+                                                           num_machines_xl,
+                                                           jobs_xl, calculate_setup_time_change_XL)
+
+        organized_jobs = self.organize_jobs_by_machine(best_solution_xl, job_times_xl)
+        machine_table_data = self.prepare_machine_table_data(organized_jobs)
+
+
 
 
         # Fill Unordered Table
         planlanmamis_table_column_names = ["Parça Kodu", "Sipariş Teslim Tarihi", "Cycle Time", "Kalıp Raf No.",
                                            "Erkek Kalıp Raf No.", "Type", "Kalıp Genişliği"]
-        cursor.execute("SELECT * FROM UNORDERED_TABLE")
+        cursor.execute('''SELECT TOP 50 CAST(m.PARCA_KODU AS varchar(50)) AS PARCA_KODU, s.PTARIH, m.CYCLE_TIME, m.KALIP_RAF_NO, m.ERKEK_KALIP_RAF_NO, m.TYPE,  m.KALIP_GENISLIGI
+FROM SAP_URT_SIP s
+INNER JOIN SAP_URT_BILESEN b ON CAST(b.AUFNR AS varchar(50)) = CAST(s.AUFNR AS varchar(50))
+INNER JOIN PLAN_MAKINELER m ON CAST(m.PARCA_KODU AS varchar(50)) = CAST(b.MATNR AS varchar(50))
+WHERE CAST(TYPE AS varchar(50)) = 'TOP' OR CAST(TYPE AS varchar(50)) = 'BOTTOM' OR CAST(TYPE AS varchar(50)) = 'MIDDLE' OR CAST(TYPE AS varchar(50)) = 'FRONT' OR CAST(TYPE AS varchar(50)) = 'BACK'
+ORDER BY CAST(s.AUFNR AS varchar(50)) ASC''')
         unordered_table_data = cursor.fetchall()
         for row in unordered_table_data:
             print(row)
@@ -159,105 +175,93 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         planlanmis_table_column_names = ["Sıra", "Parça Kodu", "Kalıp Raf No.", "Erkek Kalıp Raf No.", "Type",
                                          "Kalıp Genişliği", "Başlangıç Tarihi - Saati", "Bitiş Tarihi - Saati",
                                          "Gecikme"]
-        cursor.execute("SELECT * FROM KZ_1_TABLE")
+        cursor.execute("SELECT PARCA_KODU, PARCA_ADI, CYCLE_TIME, KALIP_RAF_NO, ERKEK_KALIP_RAF_NO, TYPE, MAKINE, GOZ_SAYISI, KALIP_GENISLIGI FROM PLAN_MAKINELER")
         kz_1_table_data = cursor.fetchall()
         for row in kz_1_table_data:
             print(row)
         self.kz_1_model = Custom_SQL_Table_Model(kz_1_table_data, planlanmis_table_column_names)
         self.KZ_1_table_view.setModel(self.kz_1_model)
 
-        cursor.execute("SELECT * FROM KZ_2_TABLE")
+        cursor.execute("SELECT PARCA_KODU, PARCA_ADI, CYCLE_TIME, KALIP_RAF_NO, ERKEK_KALIP_RAF_NO, TYPE, MAKINE, GOZ_SAYISI, KALIP_GENISLIGI FROM PLAN_MAKINELER")
         kz_2_table_data = cursor.fetchall()
         for row in kz_2_table_data:
             print(row)
         self.kz_2_model = Custom_SQL_Table_Model(kz_2_table_data, planlanmis_table_column_names)
         self.KZ_2_table_view.setModel(self.kz_2_model)
 
-        cursor.execute("SELECT * FROM KZ_3_TABLE")
+        cursor.execute("SELECT PARCA_KODU, PARCA_ADI, CYCLE_TIME, KALIP_RAF_NO, ERKEK_KALIP_RAF_NO, TYPE, MAKINE, GOZ_SAYISI, KALIP_GENISLIGI FROM PLAN_MAKINELER")
         kz_3_table_data = cursor.fetchall()
         for row in kz_3_table_data:
             print(row)
         self.kz_3_model = Custom_SQL_Table_Model(kz_3_table_data, planlanmis_table_column_names)
         self.KZ_3_table_view.setModel(self.kz_3_model)
 
-        cursor.execute("SELECT * FROM KZ_4_TABLE")
+        cursor.execute("SELECT PARCA_KODU, PARCA_ADI, CYCLE_TIME, KALIP_RAF_NO, ERKEK_KALIP_RAF_NO, TYPE, MAKINE, GOZ_SAYISI, KALIP_GENISLIGI FROM PLAN_MAKINELER")
         kz_4_table_data = cursor.fetchall()
         for row in kz_4_table_data:
             print(row)
         self.kz_4_model = Custom_SQL_Table_Model(kz_4_table_data, planlanmis_table_column_names)
         self.KZ_4_table_view.setModel(self.kz_4_model)
 
-        cursor.execute("SELECT * FROM KZ_5_TABLE")
+        cursor.execute("SELECT PARCA_KODU, PARCA_ADI, CYCLE_TIME, KALIP_RAF_NO, ERKEK_KALIP_RAF_NO, TYPE, MAKINE, GOZ_SAYISI, KALIP_GENISLIGI FROM PLAN_MAKINELER")
         kz_5_table_data = cursor.fetchall()
         for row in kz_5_table_data:
             print(row)
         self.kz_5_model = Custom_SQL_Table_Model(kz_5_table_data, planlanmis_table_column_names)
         self.KZ_5_table_view.setModel(self.kz_5_model)
 
-        cursor.execute("SELECT * FROM KZ_6_TABLE")
+        cursor.execute("SELECT PARCA_KODU, PARCA_ADI, CYCLE_TIME, KALIP_RAF_NO, ERKEK_KALIP_RAF_NO, TYPE, MAKINE, GOZ_SAYISI, KALIP_GENISLIGI FROM PLAN_MAKINELER")
         kz_6_table_data = cursor.fetchall()
         for row in kz_6_table_data:
             print(row)
         self.kz_6_model = Custom_SQL_Table_Model(kz_6_table_data, planlanmis_table_column_names)
         self.KZ_6_table_view.setModel(self.kz_6_model)
 
-        cursor.execute("SELECT * FROM KZ_7_TABLE")
+        cursor.execute("SELECT PARCA_KODU, PARCA_ADI, CYCLE_TIME, KALIP_RAF_NO, ERKEK_KALIP_RAF_NO, TYPE, MAKINE, GOZ_SAYISI, KALIP_GENISLIGI FROM PLAN_MAKINELER")
         kz_7_table_data = cursor.fetchall()
         for row in kz_7_table_data:
             print(row)
         self.kz_7_model = Custom_SQL_Table_Model(kz_7_table_data, planlanmis_table_column_names)
         self.KZ_7_table_view.setModel(self.kz_7_model)
 
-        cursor.execute("SELECT * FROM KZ_8_TABLE")
+        cursor.execute("SELECT PARCA_KODU, PARCA_ADI, CYCLE_TIME, KALIP_RAF_NO, ERKEK_KALIP_RAF_NO, TYPE, MAKINE, GOZ_SAYISI, KALIP_GENISLIGI FROM PLAN_MAKINELER")
         kz_8_table_data = cursor.fetchall()
         for row in kz_8_table_data:
             print(row)
         self.kz_8_model = Custom_SQL_Table_Model(kz_8_table_data, planlanmis_table_column_names)
         self.KZ_8_table_view.setModel(self.kz_8_model)
 
-        cursor.execute("SELECT * FROM KZ_XL_1_TABLE")
-        kz_XL_1_table_data = cursor.fetchall()
-        for row in kz_XL_1_table_data:
-            print(row)
-        self.kz_XL_1_model = Custom_SQL_Table_Model(kz_XL_1_table_data, planlanmis_table_column_names)
+
+        self.kz_XL_1_model = Custom_SQL_Table_Model(machine_table_data.get(0, []), planlanmis_table_column_names)
         self.KZ_XL_1_table_view.setModel(self.kz_XL_1_model)
 
-        cursor.execute("SELECT * FROM KZ_XL_2_TABLE")
-        kz_XL_2_table_data = cursor.fetchall()
-        for row in kz_XL_2_table_data:
-            print(row)
-        self.kz_XL_2_model = Custom_SQL_Table_Model(kz_XL_2_table_data, planlanmis_table_column_names)
+
+        self.kz_XL_2_model = Custom_SQL_Table_Model(machine_table_data.get(1, []), planlanmis_table_column_names)
         self.KZ_XL_2_table_view.setModel(self.kz_XL_2_model)
 
-        cursor.execute("SELECT * FROM KZ_XL_3_TABLE")
-        kz_XL_3_table_data = cursor.fetchall()
-        for row in kz_XL_3_table_data:
-            print(row)
-        self.kz_XL_3_model = Custom_SQL_Table_Model(kz_XL_3_table_data, planlanmis_table_column_names)
+
+        self.kz_XL_3_model = Custom_SQL_Table_Model(machine_table_data.get(2, []), planlanmis_table_column_names)
         self.KZ_XL_3_table_view.setModel(self.kz_XL_3_model)
 
-        cursor.execute("SELECT * FROM KZ_XL_4_TABLE")
-        kz_XL_4_table_data = cursor.fetchall()
-        for row in kz_XL_4_table_data:
-            print(row)
-        self.kz_XL_4_model = Custom_SQL_Table_Model(kz_XL_4_table_data, planlanmis_table_column_names)
+
+        self.kz_XL_4_model = Custom_SQL_Table_Model(machine_table_data.get(3, []), planlanmis_table_column_names)
         self.KZ_XL_4_table_view.setModel(self.kz_XL_4_model)
 
-        cursor.execute("SELECT * FROM ERL_1_TABLE")
+        cursor.execute("SELECT PARCA_KODU, PARCA_ADI, CYCLE_TIME, KALIP_RAF_NO, ERKEK_KALIP_RAF_NO, TYPE, MAKINE, GOZ_SAYISI, KALIP_GENISLIGI FROM PLAN_MAKINELER")
         ERL_1_table_data = cursor.fetchall()
         for row in ERL_1_table_data:
             print(row)
         self.ERL_1_model = Custom_SQL_Table_Model(ERL_1_table_data, planlanmis_table_column_names)
         self.ERL_1_table_view.setModel(self.ERL_1_model)
 
-        cursor.execute("SELECT * FROM ERL_2_TABLE")
+        cursor.execute("SELECT PARCA_KODU, PARCA_ADI, CYCLE_TIME, KALIP_RAF_NO, ERKEK_KALIP_RAF_NO, TYPE, MAKINE, GOZ_SAYISI, KALIP_GENISLIGI FROM PLAN_MAKINELER")
         ERL_2_table_data = cursor.fetchall()
         for row in ERL_2_table_data:
             print(row)
         self.ERL_2_model = Custom_SQL_Table_Model(ERL_2_table_data, planlanmis_table_column_names)
         self.ERL_2_table_view.setModel(self.ERL_2_model)
 
-        cursor.execute("SELECT * FROM ERL_3_TABLE")
+        cursor.execute("SELECT PARCA_KODU, PARCA_ADI, CYCLE_TIME, KALIP_RAF_NO, ERKEK_KALIP_RAF_NO, TYPE, MAKINE, GOZ_SAYISI, KALIP_GENISLIGI FROM PLAN_MAKINELER")
         ERL_3_table_data = cursor.fetchall()
         for row in ERL_3_table_data:
             print(row)
@@ -269,7 +273,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         arranged_table_column_names = ["Makine", "Parça Kodu", "Kalıp Raf No.", "Erkek Kalıp Raf No.", "Type",
                                        "Kalıp Genişliği"]
 
-        cursor.execute("SELECT * FROM ARRANGE_ORDERS_TABLE")
+        cursor.execute("SELECT PARCA_KODU, PARCA_ADI, CYCLE_TIME, KALIP_RAF_NO, ERKEK_KALIP_RAF_NO, TYPE,  KALIP_GENISLIGI FROM PLAN_MAKINELER")
         arrange_table_data = cursor.fetchall()
 
         for row in arrange_table_data:
@@ -297,7 +301,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         #Fill Stock Table
         stock_table_columns = ['Hafta', 'Hat', 'Operasyon Başlangıcı', 'İş Yükü', 'Ürün Kodu', 'Ürün Grubu', 'Orijinal Miktar', 'Bakiye Miktarı','Strafor Top Kodu', 'Strafor Top Tanımı', 'Strafor Top Stok', 'Strafor Bottom Kodu', 'Strafor Bottom Stok' ]
-        cursor.execute("SELECT * FROM STOCK_TABLE")
+        cursor.execute("SELECT TOP 50 WERKS, MATNR, LABST,ERFMG,ERFMGCO1P, LBLAB,INSME,MIKTAR, MENGE, STOK, NAKIL, MENGEKONS, ERP_TABLE_NAME FROM SAP_STOK_BILGI")
         stock_table_data = cursor.fetchall()
 
         for row in stock_table_data:
@@ -308,7 +312,33 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         conn.close()
 
+    def organize_jobs_by_machine(self, solution, job_times):
+        from collections import defaultdict
+        machines = defaultdict(list)
+        for job_id, machine, position in solution:
+            start_time, end_time, _ = job_times[(machine, position)]
+            machines[machine].append((job_id, start_time, end_time))
+        return machines
 
+    def prepare_table_data(self, jobs, job_data):
+        table_data = []
+        for job_id, start_time, end_time in jobs:
+            for job in job_data:
+                if job.job_id == job_id:
+                    table_data.append([
+                        job.job_id, job.code, job.mold_shelf_no,
+                        job.male_mold_shelf_no, job.processing_time,
+                        job.mold_width, job.deadline, start_time, end_time
+                    ])
+        return table_data
+
+    def prepare_machine_table_data(self, organized_jobs):
+        job_data = jobs_list_xl  # List of all Job objects created earlier
+        machine_table_data = {}
+        for machine, jobs in organized_jobs.items():
+            table_data = self.prepare_table_data(jobs, job_data)
+            machine_table_data[machine] = table_data
+        return machine_table_data
     # Functions for changing pages
     def change_page_to_unplanned_orders(self):
         self.stackedWidget.setCurrentIndex(0)
