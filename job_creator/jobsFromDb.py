@@ -46,12 +46,13 @@ WHERE (CAST(TYPE AS varchar(50)) = 'TOP' OR CAST(TYPE AS varchar(50)) = 'MIDDLE'
 class Job:
     current_job_id = 1
 
-    def __init__(self, code, mold_shelf_no, male_mold_shelf_no, processing_time, mold_width, deadline):
+    def __init__(self, code, mold_shelf_no, male_mold_shelf_no, job_type, processing_time, mold_width, deadline):
         self.job_id = Job.current_job_id
         Job.current_job_id += 1
         self.code = code
         self.mold_shelf_no = mold_shelf_no
         self.male_mold_shelf_no = male_mold_shelf_no
+        self.job_type = job_type
         self.processing_time = processing_time
         self.mold_width = mold_width
         self.deadline = deadline
@@ -70,6 +71,7 @@ def initialize_jobs_from_database(cursor, command):
         code = row.PARCA_KODU
         mold_shelf_no = row.KALIP_RAF_NO
         male_mold_shelf_no = row.ERKEK_KALIP_RAF_NO
+        job_type = row.TYPE
         processing_time = row.CYCLE_TIME
         mold_width = row.KALIP_GENISLIGI
         date_from_db = row.PTARIH
@@ -80,7 +82,7 @@ def initialize_jobs_from_database(cursor, command):
             difference_in_days = (date_from_db.date() - today).days
             deadline = (difference_in_days + 1) * 1440
 
-            job = Job(code, mold_shelf_no, male_mold_shelf_no, math.ceil(processing_time / 60), mold_width,
+            job = Job(code, mold_shelf_no, male_mold_shelf_no, job_type, math.ceil(processing_time / 60), mold_width,
                       deadline)
             jobs.append(job)
             all_jobs.append(job)
@@ -97,7 +99,7 @@ jobs_list_xl = initialize_jobs_from_database(cursor, xl_command)
 
 for job in all_jobs:
     print(
-        f"Job ID: {job.job_id}, Code: {job.code}, Mold Shelf No: {job.mold_shelf_no}, Male Mold Shelf No: {job.male_mold_shelf_no}, Processing Time: {job.processing_time}, Mold Width: {job.mold_width}, Deadline: {job.deadline}")
+        f"Job ID: {job.job_id}, Code: {job.code}, Mold Shelf No: {job.mold_shelf_no}, Male Mold Shelf No: {job.male_mold_shelf_no}, Type: {job.job_type}, Processing Time: {job.processing_time}, Mold Width: {job.mold_width}, Deadline: {job.deadline}")
 
 
 job_count = len(all_jobs)

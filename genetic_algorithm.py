@@ -384,8 +384,9 @@ def calculate_start_and_end_times(best_solution, machines, calculate_setup_time_
         end_time = start_time + job.processing_time
         machine_finish_times[machine_id] = end_time  # Update machine finish time
 
-        job_times[(machine_id, position)] = (start_time, end_time, job_id)
+
         job_tardiness = max(0, end_time - job.deadline)
+        job_times[(machine_id, position)] = (start_time, end_time, job_tardiness, job_id)
 
         # Print job details
         print(f"Job {job_id}: Start Time={start_time}, End Time={end_time}, Tardiness={job_tardiness} on Machine {machine_id}")
