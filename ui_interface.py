@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'interfaceNCUUsV.ui'
+## Form generated from reading UI file 'interfaceJDScYk.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.0
 ##
@@ -366,15 +366,6 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_10.addWidget(self.planlanmamis_siparis_label)
 
-        self.tarihler_label_2 = QLabel(self.unplanned_orders)
-        self.tarihler_label_2.setObjectName(u"tarihler_label_2")
-        font3 = QFont()
-        font3.setPointSize(11)
-        self.tarihler_label_2.setFont(font3)
-        self.tarihler_label_2.setStyleSheet(u"")
-
-        self.verticalLayout_10.addWidget(self.tarihler_label_2)
-
         self.horizontalLayout_7 = QHBoxLayout()
         self.horizontalLayout_7.setSpacing(10)
         self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
@@ -403,9 +394,9 @@ class Ui_MainWindow(object):
         self.verticalLayout_15.setContentsMargins(5, -1, 5, -1)
         self.filters_label_2 = QLabel(self.scrollAreaWidgetContents_2)
         self.filters_label_2.setObjectName(u"filters_label_2")
-        font4 = QFont()
-        font4.setPointSize(12)
-        self.filters_label_2.setFont(font4)
+        font3 = QFont()
+        font3.setPointSize(12)
+        self.filters_label_2.setFont(font3)
         self.filters_label_2.setStyleSheet(u"")
 
         self.verticalLayout_15.addWidget(self.filters_label_2)
@@ -484,7 +475,9 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.kalip_genisligi_fltr_label_btn_2.sizePolicy().hasHeightForWidth())
         self.kalip_genisligi_fltr_label_btn_2.setSizePolicy(sizePolicy)
-        self.kalip_genisligi_fltr_label_btn_2.setFont(font3)
+        font4 = QFont()
+        font4.setPointSize(11)
+        self.kalip_genisligi_fltr_label_btn_2.setFont(font4)
         self.kalip_genisligi_fltr_label_btn_2.setCursor(QCursor(Qt.PointingHandCursor))
         self.kalip_genisligi_fltr_label_btn_2.setStyleSheet(u"*{\n"
 "border: none;\n"
@@ -573,7 +566,7 @@ class Ui_MainWindow(object):
         self.montaj_ihtiyac_fltr_label_btn_2.setObjectName(u"montaj_ihtiyac_fltr_label_btn_2")
         sizePolicy.setHeightForWidth(self.montaj_ihtiyac_fltr_label_btn_2.sizePolicy().hasHeightForWidth())
         self.montaj_ihtiyac_fltr_label_btn_2.setSizePolicy(sizePolicy)
-        self.montaj_ihtiyac_fltr_label_btn_2.setFont(font3)
+        self.montaj_ihtiyac_fltr_label_btn_2.setFont(font4)
         self.montaj_ihtiyac_fltr_label_btn_2.setCursor(QCursor(Qt.PointingHandCursor))
         self.montaj_ihtiyac_fltr_label_btn_2.setStyleSheet(u"*{\n"
 "border: none;\n"
@@ -667,7 +660,7 @@ class Ui_MainWindow(object):
         self.type_fltr_label_btn_2.setObjectName(u"type_fltr_label_btn_2")
         sizePolicy.setHeightForWidth(self.type_fltr_label_btn_2.sizePolicy().hasHeightForWidth())
         self.type_fltr_label_btn_2.setSizePolicy(sizePolicy)
-        self.type_fltr_label_btn_2.setFont(font3)
+        self.type_fltr_label_btn_2.setFont(font4)
         self.type_fltr_label_btn_2.setCursor(QCursor(Qt.PointingHandCursor))
         self.type_fltr_label_btn_2.setStyleSheet(u"*{\n"
 "border: none;\n"
@@ -854,7 +847,7 @@ class Ui_MainWindow(object):
 
         self.tarihler_label = QLabel(self.planned_orders)
         self.tarihler_label.setObjectName(u"tarihler_label")
-        self.tarihler_label.setFont(font3)
+        self.tarihler_label.setFont(font4)
         self.tarihler_label.setStyleSheet(u"")
 
         self.verticalLayout_8.addWidget(self.tarihler_label)
@@ -884,7 +877,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_41.setContentsMargins(-1, 5, -1, -1)
         self.KZ_1_label = QLabel(self.scrollAreaWidgetContents_5)
         self.KZ_1_label.setObjectName(u"KZ_1_label")
-        self.KZ_1_label.setFont(font3)
+        self.KZ_1_label.setFont(font4)
         self.KZ_1_label.setStyleSheet(u"")
         self.KZ_1_label.setMargin(0)
 
@@ -908,7 +901,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_42.setContentsMargins(-1, 0, -1, -1)
         self.KZ_2_label = QLabel(self.scrollAreaWidgetContents_5)
         self.KZ_2_label.setObjectName(u"KZ_2_label")
-        self.KZ_2_label.setFont(font3)
+        self.KZ_2_label.setFont(font4)
 
         self.verticalLayout_42.addWidget(self.KZ_2_label)
 
@@ -927,7 +920,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_43.setObjectName(u"verticalLayout_43")
         self.KZ_3_label = QLabel(self.scrollAreaWidgetContents_5)
         self.KZ_3_label.setObjectName(u"KZ_3_label")
-        self.KZ_3_label.setFont(font3)
+        self.KZ_3_label.setFont(font4)
 
         self.verticalLayout_43.addWidget(self.KZ_3_label)
 
@@ -946,7 +939,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_44.setObjectName(u"verticalLayout_44")
         self.KZ_4_label = QLabel(self.scrollAreaWidgetContents_5)
         self.KZ_4_label.setObjectName(u"KZ_4_label")
-        self.KZ_4_label.setFont(font3)
+        self.KZ_4_label.setFont(font4)
 
         self.verticalLayout_44.addWidget(self.KZ_4_label)
 
@@ -965,7 +958,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_45.setObjectName(u"verticalLayout_45")
         self.KZ_5_label = QLabel(self.scrollAreaWidgetContents_5)
         self.KZ_5_label.setObjectName(u"KZ_5_label")
-        self.KZ_5_label.setFont(font3)
+        self.KZ_5_label.setFont(font4)
 
         self.verticalLayout_45.addWidget(self.KZ_5_label)
 
@@ -984,7 +977,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_46.setObjectName(u"verticalLayout_46")
         self.KZ_6_label = QLabel(self.scrollAreaWidgetContents_5)
         self.KZ_6_label.setObjectName(u"KZ_6_label")
-        self.KZ_6_label.setFont(font3)
+        self.KZ_6_label.setFont(font4)
 
         self.verticalLayout_46.addWidget(self.KZ_6_label)
 
@@ -1003,7 +996,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_47.setObjectName(u"verticalLayout_47")
         self.KZ_7_label = QLabel(self.scrollAreaWidgetContents_5)
         self.KZ_7_label.setObjectName(u"KZ_7_label")
-        self.KZ_7_label.setFont(font3)
+        self.KZ_7_label.setFont(font4)
 
         self.verticalLayout_47.addWidget(self.KZ_7_label)
 
@@ -1022,7 +1015,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_48.setObjectName(u"verticalLayout_48")
         self.KZ_8_label = QLabel(self.scrollAreaWidgetContents_5)
         self.KZ_8_label.setObjectName(u"KZ_8_label")
-        self.KZ_8_label.setFont(font3)
+        self.KZ_8_label.setFont(font4)
 
         self.verticalLayout_48.addWidget(self.KZ_8_label)
 
@@ -1041,7 +1034,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_49.setObjectName(u"verticalLayout_49")
         self.KZ_XL_1_label = QLabel(self.scrollAreaWidgetContents_5)
         self.KZ_XL_1_label.setObjectName(u"KZ_XL_1_label")
-        self.KZ_XL_1_label.setFont(font3)
+        self.KZ_XL_1_label.setFont(font4)
 
         self.verticalLayout_49.addWidget(self.KZ_XL_1_label)
 
@@ -1060,7 +1053,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_50.setObjectName(u"verticalLayout_50")
         self.KZ_XL_2_label = QLabel(self.scrollAreaWidgetContents_5)
         self.KZ_XL_2_label.setObjectName(u"KZ_XL_2_label")
-        self.KZ_XL_2_label.setFont(font3)
+        self.KZ_XL_2_label.setFont(font4)
 
         self.verticalLayout_50.addWidget(self.KZ_XL_2_label)
 
@@ -1079,7 +1072,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_51.setObjectName(u"verticalLayout_51")
         self.KZ_XL_3_label = QLabel(self.scrollAreaWidgetContents_5)
         self.KZ_XL_3_label.setObjectName(u"KZ_XL_3_label")
-        self.KZ_XL_3_label.setFont(font3)
+        self.KZ_XL_3_label.setFont(font4)
 
         self.verticalLayout_51.addWidget(self.KZ_XL_3_label)
 
@@ -1098,7 +1091,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_52.setObjectName(u"verticalLayout_52")
         self.KZ_XL_4_label = QLabel(self.scrollAreaWidgetContents_5)
         self.KZ_XL_4_label.setObjectName(u"KZ_XL_4_label")
-        self.KZ_XL_4_label.setFont(font3)
+        self.KZ_XL_4_label.setFont(font4)
 
         self.verticalLayout_52.addWidget(self.KZ_XL_4_label)
 
@@ -1117,7 +1110,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_53.setObjectName(u"verticalLayout_53")
         self.ERL_1_label = QLabel(self.scrollAreaWidgetContents_5)
         self.ERL_1_label.setObjectName(u"ERL_1_label")
-        self.ERL_1_label.setFont(font3)
+        self.ERL_1_label.setFont(font4)
 
         self.verticalLayout_53.addWidget(self.ERL_1_label)
 
@@ -1136,7 +1129,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_54.setObjectName(u"verticalLayout_54")
         self.ERL_2_label = QLabel(self.scrollAreaWidgetContents_5)
         self.ERL_2_label.setObjectName(u"ERL_2_label")
-        self.ERL_2_label.setFont(font3)
+        self.ERL_2_label.setFont(font4)
 
         self.verticalLayout_54.addWidget(self.ERL_2_label)
 
@@ -1155,7 +1148,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_55.setObjectName(u"verticalLayout_55")
         self.ERL_3_label = QLabel(self.scrollAreaWidgetContents_5)
         self.ERL_3_label.setObjectName(u"ERL_3_label")
-        self.ERL_3_label.setFont(font3)
+        self.ERL_3_label.setFont(font4)
 
         self.verticalLayout_55.addWidget(self.ERL_3_label)
 
@@ -1193,7 +1186,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_12.setContentsMargins(5, -1, 5, -1)
         self.filters_label = QLabel(self.scrollAreaWidgetContents)
         self.filters_label.setObjectName(u"filters_label")
-        self.filters_label.setFont(font4)
+        self.filters_label.setFont(font3)
         self.filters_label.setStyleSheet(u"")
 
         self.verticalLayout_12.addWidget(self.filters_label)
@@ -1266,7 +1259,7 @@ class Ui_MainWindow(object):
         self.makineler_fltr_label_btn.setObjectName(u"makineler_fltr_label_btn")
         sizePolicy.setHeightForWidth(self.makineler_fltr_label_btn.sizePolicy().hasHeightForWidth())
         self.makineler_fltr_label_btn.setSizePolicy(sizePolicy)
-        self.makineler_fltr_label_btn.setFont(font3)
+        self.makineler_fltr_label_btn.setFont(font4)
         self.makineler_fltr_label_btn.setCursor(QCursor(Qt.PointingHandCursor))
         self.makineler_fltr_label_btn.setStyleSheet(u"*{\n"
 "border: none;\n"
@@ -1409,7 +1402,7 @@ class Ui_MainWindow(object):
         self.kalip_genisligi_fltr_label_btn.setObjectName(u"kalip_genisligi_fltr_label_btn")
         sizePolicy.setHeightForWidth(self.kalip_genisligi_fltr_label_btn.sizePolicy().hasHeightForWidth())
         self.kalip_genisligi_fltr_label_btn.setSizePolicy(sizePolicy)
-        self.kalip_genisligi_fltr_label_btn.setFont(font3)
+        self.kalip_genisligi_fltr_label_btn.setFont(font4)
         self.kalip_genisligi_fltr_label_btn.setCursor(QCursor(Qt.PointingHandCursor))
         self.kalip_genisligi_fltr_label_btn.setStyleSheet(u"*{\n"
 "border: none;\n"
@@ -1493,7 +1486,7 @@ class Ui_MainWindow(object):
         self.type_fltr_label_btn.setObjectName(u"type_fltr_label_btn")
         sizePolicy.setHeightForWidth(self.type_fltr_label_btn.sizePolicy().hasHeightForWidth())
         self.type_fltr_label_btn.setSizePolicy(sizePolicy)
-        self.type_fltr_label_btn.setFont(font3)
+        self.type_fltr_label_btn.setFont(font4)
         self.type_fltr_label_btn.setCursor(QCursor(Qt.PointingHandCursor))
         self.type_fltr_label_btn.setStyleSheet(u"*{\n"
 "border: none;\n"
@@ -1828,7 +1821,7 @@ class Ui_MainWindow(object):
         self.type_fltr_label_btn.toggled.connect(self.type_fltr_icon_btn.setChecked)
         self.type_fltr_icon_btn.toggled.connect(self.type_fltr_label_btn.setChecked)
 
-        self.stackedWidget.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -1849,7 +1842,6 @@ class Ui_MainWindow(object):
         self.vestel_logo_2.setText(QCoreApplication.translate("MainWindow", u" i\u00e7in geli\u015ftirilmi\u015ftir", None))
         self.change_btn.setText("")
         self.planlanmamis_siparis_label.setText(QCoreApplication.translate("MainWindow", u"Planlanmam\u0131\u015f Strafor Sipari\u015fleri", None))
-        self.tarihler_label_2.setText(QCoreApplication.translate("MainWindow", u"Tarihler", None))
         self.filters_label_2.setText(QCoreApplication.translate("MainWindow", u"Filtreler", None))
         self.search_input_2.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Par\u00e7a Kodu Ara...", None))
         self.search_btn_2.setText("")
@@ -1871,7 +1863,7 @@ class Ui_MainWindow(object):
         self.uygula_btn_2.setText(QCoreApplication.translate("MainWindow", u"Uygula", None))
         self.planla_btn.setText(QCoreApplication.translate("MainWindow", u"Planla", None))
         self.planlanmis_siparis_label.setText(QCoreApplication.translate("MainWindow", u"Planlanm\u0131\u015f Strafor Sipari\u015fleri", None))
-        self.tarihler_label.setText(QCoreApplication.translate("MainWindow", u"Tarihler", None))
+        self.tarihler_label.setText(QCoreApplication.translate("MainWindow", u"Makineler", None))
         self.KZ_1_label.setText(QCoreApplication.translate("MainWindow", u"KZ-1", None))
         self.KZ_2_label.setText(QCoreApplication.translate("MainWindow", u"KZ-2", None))
         self.KZ_3_label.setText(QCoreApplication.translate("MainWindow", u"KZ-3", None))

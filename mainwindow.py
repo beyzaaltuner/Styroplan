@@ -77,10 +77,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.icon_only_widget.hide()
         self.stackedWidget.setCurrentIndex(0)  # First to be displayed is 'unplanned_orders'
         self.menu_unplanned_btn_2.setChecked(True)
-        self.planlanmamis_combobox.setCurrentIndex(-1)
-        self.planlanmamis_combobox.setCurrentText("Sırala")
-        self.planlanmis_combobox.setCurrentIndex(-1)
-        self.planlanmis_combobox.setCurrentText("Sırala")
+
 
         self.init_machine_table_data()
 
