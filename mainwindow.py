@@ -5,6 +5,8 @@ from PySide6.QtGui import QTextCharFormat, QStandardItemModel, QStandardItem
 
 from genetic_algorithm import *
 from ui_interface import Ui_MainWindow
+import pandas as pd
+from openpyxl.workbook import Workbook
 
 import pyodbc as pyodbc
 from job_creator.jobsFromDb import *
@@ -90,7 +92,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.menu_stock_btn_2.clicked.connect(self.change_page_to_stok_raporlari)
         self.planla_btn.clicked.connect(self.change_page_to_planned_orders)
         self.arrange_table_btn.clicked.connect(self.change_page_to_arrange_tables)
-        self.kaydet_btn.clicked.connect(self.change_page_to_planned_orders)
+        self.kaydet_btn.clicked.connect(self.export_to_excel)
 
         # Make filters invisible initially
         self.kalip_genisligi_check_boxes_2.setVisible(False)
@@ -134,8 +136,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.uygula_btn_2.clicked.connect(self.get_selected_dates_2)
 
         #self.uygula_btn.clicked.connect(self.get_selected_kalip_genisligi_checkboxes)
-        self.uygula_btn.clicked.connect(self.get_selected_makineler_checkboxes)
-        self.uygula_btn.clicked.connect(self.get_search_input)
+        #self.uygula_btn.clicked.connect(self.get_selected_makineler_checkboxes)
+        #self.uygula_btn.clicked.connect(self.get_search_input)
         #self.uygula_btn.clicked.connect(self.get_selected_type_checkboxes)
         self.uygula_btn.clicked.connect(self.update_table_models)
 
@@ -221,11 +223,11 @@ ORDER BY CAST(s.AUFNR AS varchar(50)) ASC''')
         self.ERL_3_table_view.setModel(self.ERL_3_model)
 
         #Fill arrange tables
-        arranged_table_column_names = ["Makine", "Parça Kodu", "Kalıp Raf No.", "Erkek Kalıp Raf No.", "Type",
+        self.arranged_table_column_names = ["Makine", "Parça Kodu", "Kalıp Raf No.", "Erkek Kalıp Raf No.", "Type",
                                        "Kalıp Genişliği"]
 
         cursor.execute(
-            "SELECT PARCA_KODU, PARCA_ADI, CYCLE_TIME, KALIP_RAF_NO, ERKEK_KALIP_RAF_NO, TYPE,  KALIP_GENISLIGI FROM PLAN_MAKINELER")
+            "SELECT PARCA_KODU, PARCA_ADI, CYCLE_TIME, KALIP_RAF_NO, ERKEK_KALIP_RAF_NO, TYPE FROM PLAN_MAKINELER")
         arrange_table_data = cursor.fetchall()
 
         for row in arrange_table_data:
@@ -239,7 +241,7 @@ ORDER BY CAST(s.AUFNR AS varchar(50)) ASC''')
 
         self.arranged_table_model = Arrange_Table_Model()
 
-        self.arranged_table_model.setHorizontalHeaderLabels(arranged_table_column_names)
+        self.arranged_table_model.setHorizontalHeaderLabels(self.arranged_table_column_names)
 
         for row in arrange_table_data:
             items = []
@@ -387,6 +389,7 @@ ORDER BY CAST(s.AUFNR AS varchar(50)) ASC''')
     def get_search_input(self):
         text = self.search_input.text()
         print("Searching for: ", text)
+        return text
 
     def get_selected_kalip_genisligi_2_checkboxes(self):
         # Getting values as string
@@ -571,7 +574,7 @@ ORDER BY CAST(s.AUFNR AS varchar(50)) ASC''')
         print("Selected Type Checkboxes:", selected_checkboxes)
         return selected_checkboxes
 
-    def filter_machine_table_data(self, machine_table_data, selected_checkboxes_kalıp_genisligi, selected_checkboxes_type):
+    def filter_machine_table_data(self, machine_table_data, selected_checkboxes_kalıp_genisligi, selected_checkboxes_type, searched_parca_kodu):
         filtered_machine_table_data = {}
         for machine, jobs in machine_table_data.items():
             filtered_jobs = jobs  # Start with all jobs
@@ -581,6 +584,13 @@ ORDER BY CAST(s.AUFNR AS varchar(50)) ASC''')
 
             if selected_checkboxes_type:
                 filtered_jobs = [job for job in filtered_jobs if job[4] in selected_checkboxes_type]
+
+            if searched_parca_kodu:
+                print("Searching for part code:", searched_parca_kodu)
+            # Filter jobs that contain the searched part code in any part of the job data
+                filtered_jobs = [job for job in filtered_jobs if searched_parca_kodu in job[1]]
+                print("Filtered jobs after part code search:", filtered_jobs)
+
             filtered_machine_table_data[machine] = filtered_jobs
         return filtered_machine_table_data
     def update_table_models(self):
@@ -589,21 +599,73 @@ ORDER BY CAST(s.AUFNR AS varchar(50)) ASC''')
             return
         selected_checkboxes_kalıp_genisligi = self.get_selected_kalip_genisligi_checkboxes()
         selected_checkboxes_type = self.get_selected_type_checkboxes()
+        selected_checkboxes_machine = self.get_selected_makineler_checkboxes()
+        searched_parca_kodu = self.get_search_input()
 
         # Filter the data
         filtered_machine_table_data_xl = self.filter_machine_table_data(self.machine_table_data_xl,
                                                                     selected_checkboxes_kalıp_genisligi,
-                                                                    selected_checkboxes_type
+                                                                    selected_checkboxes_type,
+                                                                    searched_parca_kodu
                                                                     )
         filtered_machine_table_data_kz = self.filter_machine_table_data(self.machine_table_data_kz,
                                                                         selected_checkboxes_kalıp_genisligi,
-                                                                        selected_checkboxes_type
+                                                                        selected_checkboxes_type,
+                                                                        searched_parca_kodu
                                                                         )
         filtered_machine_table_data_erl = self.filter_machine_table_data(self.machine_table_data_erl,
                                                                          selected_checkboxes_kalıp_genisligi,
-                                                                         selected_checkboxes_type
+                                                                         selected_checkboxes_type,
+                                                                         searched_parca_kodu
                                                                          )
+        all_kz_views = [
+            self.KZ_1_table_view, self.KZ_2_table_view, self.KZ_3_table_view, self.KZ_4_table_view,
+            self.KZ_5_table_view, self.KZ_6_table_view, self.KZ_7_table_view, self.KZ_8_table_view
+        ]
+        all_xl_views = [
+            self.KZ_XL_1_table_view, self.KZ_XL_2_table_view, self.KZ_XL_3_table_view, self.KZ_XL_4_table_view
+        ]
+        all_erl_views = [
+            self.ERL_1_table_view, self.ERL_2_table_view, self.ERL_3_table_view
+        ]
 
+        all_kz_labels = [
+            self.KZ_1_label, self.KZ_2_label, self.KZ_3_label, self.KZ_4_label,
+            self.KZ_5_label, self.KZ_6_label, self.KZ_7_label, self.KZ_8_label
+        ]
+        all_xl_labels = [
+            self.KZ_XL_1_label, self.KZ_XL_2_label, self.KZ_XL_3_label, self.KZ_XL_4_label
+        ]
+        all_erl_labels = [
+            self.ERL_1_label, self.ERL_2_label, self.ERL_3_label
+        ]
+
+        for view, label in zip(all_kz_views, all_kz_labels):
+            label_text = label.text()
+            if label_text in selected_checkboxes_machine:
+                view.setVisible(True)
+                label.setVisible(True)
+            else:
+                view.setVisible(False)
+                label.setVisible(False)
+
+        for view, label in zip(all_xl_views, all_xl_labels):
+            label_text = label.text()
+            if label_text in selected_checkboxes_machine:
+                view.setVisible(True)
+                label.setVisible(True)
+            else:
+                view.setVisible(False)
+                label.setVisible(False)
+
+        for view, label in zip(all_erl_views, all_erl_labels):
+            label_text = label.text()
+            if label_text in selected_checkboxes_machine:
+                view.setVisible(True)
+                label.setVisible(True)
+            else:
+                view.setVisible(False)
+                label.setVisible(False)
         # Update table models
         self.kz_1_model = Custom_SQL_Table_Model(filtered_machine_table_data_kz.get(0, []),
                                                  self.planlanmis_table_column_names)
@@ -670,3 +732,25 @@ ORDER BY CAST(s.AUFNR AS varchar(50)) ASC''')
 
     def get_selected_order_planlanmis(self, value):
         print("Selected order for planlanmis :", value)
+
+    def export_to_excel(self):
+        # Get data from the table model
+        data = []
+        for row in range(self.arranged_table_model.rowCount()):
+            row_data = []
+            for column in range(self.arranged_table_model.columnCount()):
+                item = self.arranged_table_model.item(row, column)
+                if item is not None:
+                    row_data.append(item.text())
+                else:
+                    row_data.append('')  # Handle empty cells
+            data.append(row_data)
+
+        # Convert data to DataFrame
+        df = pd.DataFrame(data, columns=self.arranged_table_column_names)
+
+        # Export DataFrame to Excel
+        excel_file_path = 'output.xlsx'  # Path to save the Excel file
+        df.to_excel(excel_file_path, index=False)
+
+        print("Data exported to Excel successfully!")

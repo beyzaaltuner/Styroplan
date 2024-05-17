@@ -350,9 +350,6 @@ def genetic_algorithm(population_size, mutation_rate, max_generations, num_machi
 
     return best_solution, job_times  # Return both the best solution and job times
 
-    # Example implementation
-
-
 
 
 
