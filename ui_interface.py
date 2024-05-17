@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'interfaceXHbbXP.ui'
+## Form generated from reading UI file 'interfaceNCUUsV.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.0
 ##
@@ -15,11 +15,11 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QCalendarWidget, QCheckBox, QComboBox,
-    QGridLayout, QHBoxLayout, QHeaderView, QLabel,
-    QLineEdit, QMainWindow, QPushButton, QScrollArea,
-    QSizePolicy, QSpacerItem, QStackedWidget, QTableView,
-    QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QCalendarWidget, QCheckBox, QGridLayout,
+    QHBoxLayout, QHeaderView, QLabel, QLineEdit,
+    QMainWindow, QPushButton, QScrollArea, QSizePolicy,
+    QSpacerItem, QStackedWidget, QTableView, QVBoxLayout,
+    QWidget)
 import resources_rc
 
 class Ui_MainWindow(object):
@@ -375,69 +375,6 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_10.addWidget(self.tarihler_label_2)
 
-        self.combobox_widget_2 = QWidget(self.unplanned_orders)
-        self.combobox_widget_2.setObjectName(u"combobox_widget_2")
-        self.combobox_widget_2.setMinimumSize(QSize(0, 30))
-        self.horizontalLayout_23 = QHBoxLayout(self.combobox_widget_2)
-        self.horizontalLayout_23.setSpacing(0)
-        self.horizontalLayout_23.setObjectName(u"horizontalLayout_23")
-        self.horizontalLayout_23.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_22 = QHBoxLayout()
-        self.horizontalLayout_22.setObjectName(u"horizontalLayout_22")
-        self.planlanmamis_combobox = QComboBox(self.combobox_widget_2)
-        self.planlanmamis_combobox.addItem("")
-        self.planlanmamis_combobox.addItem("")
-        self.planlanmamis_combobox.addItem("")
-        self.planlanmamis_combobox.setObjectName(u"planlanmamis_combobox")
-        font4 = QFont()
-        font4.setPointSize(9)
-        self.planlanmamis_combobox.setFont(font4)
-        self.planlanmamis_combobox.setCursor(QCursor(Qt.PointingHandCursor))
-        self.planlanmamis_combobox.setStyleSheet(u"*{\n"
-"border: 1px solid #EEEEEE;\n"
-"border-radius: 5px;\n"
-"padding: 5px 10px;\n"
-"}\n"
-"\n"
-"*::drop-down{\n"
-"border: 0px;\n"
-"}\n"
-"\n"
-"*::down-arrow{\n"
-"image: url(:/icons/icons/down-arrow.png);\n"
-"width: 14px;\n"
-"height:14px;\n"
-"margin-right: 10px;\n"
-"}\n"
-"\n"
-"QListView{\n"
-"border: 1px solid #EEEEEE;\n"
-"padding: 5px;\n"
-"outline: 0px;\n"
-"}\n"
-"\n"
-"QListView::item:hover{\n"
-"background-color: #EEEEEE;\n"
-"color: black;\n"
-"}\n"
-"QListView::item:selected{\n"
-"background-color: #EEEEEE;\n"
-"}\n"
-"\n"
-"")
-
-        self.horizontalLayout_22.addWidget(self.planlanmamis_combobox)
-
-        self.horizontalSpacer_9 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_22.addItem(self.horizontalSpacer_9)
-
-
-        self.horizontalLayout_23.addLayout(self.horizontalLayout_22)
-
-
-        self.verticalLayout_10.addWidget(self.combobox_widget_2)
-
         self.horizontalLayout_7 = QHBoxLayout()
         self.horizontalLayout_7.setSpacing(10)
         self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
@@ -466,9 +403,9 @@ class Ui_MainWindow(object):
         self.verticalLayout_15.setContentsMargins(5, -1, 5, -1)
         self.filters_label_2 = QLabel(self.scrollAreaWidgetContents_2)
         self.filters_label_2.setObjectName(u"filters_label_2")
-        font5 = QFont()
-        font5.setPointSize(12)
-        self.filters_label_2.setFont(font5)
+        font4 = QFont()
+        font4.setPointSize(12)
+        self.filters_label_2.setFont(font4)
         self.filters_label_2.setStyleSheet(u"")
 
         self.verticalLayout_15.addWidget(self.filters_label_2)
@@ -922,68 +859,6 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_8.addWidget(self.tarihler_label)
 
-        self.combobox_widget = QWidget(self.planned_orders)
-        self.combobox_widget.setObjectName(u"combobox_widget")
-        self.combobox_widget.setMinimumSize(QSize(0, 30))
-        self.horizontalLayout_17 = QHBoxLayout(self.combobox_widget)
-        self.horizontalLayout_17.setSpacing(0)
-        self.horizontalLayout_17.setObjectName(u"horizontalLayout_17")
-        self.horizontalLayout_17.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_16 = QHBoxLayout()
-        self.horizontalLayout_16.setObjectName(u"horizontalLayout_16")
-        self.planlanmis_combobox = QComboBox(self.combobox_widget)
-        self.planlanmis_combobox.addItem("")
-        self.planlanmis_combobox.addItem("")
-        self.planlanmis_combobox.addItem("")
-        self.planlanmis_combobox.addItem("")
-        self.planlanmis_combobox.setObjectName(u"planlanmis_combobox")
-        self.planlanmis_combobox.setFont(font4)
-        self.planlanmis_combobox.setCursor(QCursor(Qt.PointingHandCursor))
-        self.planlanmis_combobox.setStyleSheet(u"*{\n"
-"border: 1px solid #EEEEEE;\n"
-"border-radius: 5px;\n"
-"padding: 5px 10px;\n"
-"}\n"
-"\n"
-"*::drop-down{\n"
-"border: 0px;\n"
-"}\n"
-"\n"
-"*::down-arrow{\n"
-"image: url(:/icons/icons/down-arrow.png);\n"
-"width: 14px;\n"
-"height:14px;\n"
-"margin-right: 10px;\n"
-"}\n"
-"\n"
-"QListView{\n"
-"border: 1px solid #EEEEEE;\n"
-"padding: 5px;\n"
-"outline: 0px;\n"
-"}\n"
-"\n"
-"QListView::item:hover{\n"
-"background-color: #EEEEEE;\n"
-"color: black;\n"
-"}\n"
-"QListView::item:selected{\n"
-"background-color: #EEEEEE;\n"
-"}\n"
-"\n"
-"")
-
-        self.horizontalLayout_16.addWidget(self.planlanmis_combobox)
-
-        self.horizontalSpacer_8 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_16.addItem(self.horizontalSpacer_8)
-
-
-        self.horizontalLayout_17.addLayout(self.horizontalLayout_16)
-
-
-        self.verticalLayout_8.addWidget(self.combobox_widget)
-
         self.horizontalLayout_6 = QHBoxLayout()
         self.horizontalLayout_6.setSpacing(10)
         self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
@@ -1308,7 +1183,7 @@ class Ui_MainWindow(object):
         self.planned_fltr_scroll_area.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 178, 602))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, -111, 178, 602))
         self.verticalLayout_14 = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_14.setObjectName(u"verticalLayout_14")
         self.verticalLayout_14.setContentsMargins(0, -1, 0, -1)
@@ -1318,7 +1193,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_12.setContentsMargins(5, -1, 5, -1)
         self.filters_label = QLabel(self.scrollAreaWidgetContents)
         self.filters_label.setObjectName(u"filters_label")
-        self.filters_label.setFont(font5)
+        self.filters_label.setFont(font4)
         self.filters_label.setStyleSheet(u"")
 
         self.verticalLayout_12.addWidget(self.filters_label)
@@ -1804,9 +1679,9 @@ class Ui_MainWindow(object):
 
         self.no_planned_order_label = QLabel(self.no_planned_order_page)
         self.no_planned_order_label.setObjectName(u"no_planned_order_label")
-        font6 = QFont()
-        font6.setPointSize(14)
-        self.no_planned_order_label.setFont(font6)
+        font5 = QFont()
+        font5.setPointSize(14)
+        self.no_planned_order_label.setFont(font5)
 
         self.horizontalLayout_36.addWidget(self.no_planned_order_label)
 
@@ -1953,7 +1828,7 @@ class Ui_MainWindow(object):
         self.type_fltr_label_btn.toggled.connect(self.type_fltr_icon_btn.setChecked)
         self.type_fltr_icon_btn.toggled.connect(self.type_fltr_label_btn.setChecked)
 
-        self.stackedWidget.setCurrentIndex(1)
+        self.stackedWidget.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -1975,11 +1850,6 @@ class Ui_MainWindow(object):
         self.change_btn.setText("")
         self.planlanmamis_siparis_label.setText(QCoreApplication.translate("MainWindow", u"Planlanmam\u0131\u015f Strafor Sipari\u015fleri", None))
         self.tarihler_label_2.setText(QCoreApplication.translate("MainWindow", u"Tarihler", None))
-        self.planlanmamis_combobox.setItemText(0, QCoreApplication.translate("MainWindow", u"S\u0131rala", None))
-        self.planlanmamis_combobox.setItemText(1, QCoreApplication.translate("MainWindow", u"Sipari\u015f Teslim Tarihi", None))
-        self.planlanmamis_combobox.setItemText(2, QCoreApplication.translate("MainWindow", u"Cycle Time", None))
-
-        self.planlanmamis_combobox.setPlaceholderText(QCoreApplication.translate("MainWindow", u"S\u0131rala", None))
         self.filters_label_2.setText(QCoreApplication.translate("MainWindow", u"Filtreler", None))
         self.search_input_2.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Par\u00e7a Kodu Ara...", None))
         self.search_btn_2.setText("")
@@ -2002,12 +1872,6 @@ class Ui_MainWindow(object):
         self.planla_btn.setText(QCoreApplication.translate("MainWindow", u"Planla", None))
         self.planlanmis_siparis_label.setText(QCoreApplication.translate("MainWindow", u"Planlanm\u0131\u015f Strafor Sipari\u015fleri", None))
         self.tarihler_label.setText(QCoreApplication.translate("MainWindow", u"Tarihler", None))
-        self.planlanmis_combobox.setItemText(0, QCoreApplication.translate("MainWindow", u"S\u0131rala", None))
-        self.planlanmis_combobox.setItemText(1, QCoreApplication.translate("MainWindow", u"Ba\u015flang\u0131\u00e7 Tarihi - Saati", None))
-        self.planlanmis_combobox.setItemText(2, QCoreApplication.translate("MainWindow", u"Biti\u015f Tarihi - Saati", None))
-        self.planlanmis_combobox.setItemText(3, QCoreApplication.translate("MainWindow", u"Gecikme", None))
-
-        self.planlanmis_combobox.setPlaceholderText(QCoreApplication.translate("MainWindow", u"S\u0131rala", None))
         self.KZ_1_label.setText(QCoreApplication.translate("MainWindow", u"KZ-1", None))
         self.KZ_2_label.setText(QCoreApplication.translate("MainWindow", u"KZ-2", None))
         self.KZ_3_label.setText(QCoreApplication.translate("MainWindow", u"KZ-3", None))
