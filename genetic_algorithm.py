@@ -106,17 +106,16 @@ def calculate_setup_time_change_ERL(previous_job, current_job):
 def initialize_population(population_size, num_machines, jobs):
     population = []
     for _ in range(population_size):
-        # Shuffle jobs to ensure that each chromosome starts with a different permutation of jobs.
+
         random.shuffle(jobs)
         chromosome = []
         for job in jobs:
-            machine = random.randint(0, num_machines - 1)  # Randomly assigns a machine index to the job
+            machine = random.randint(0, num_machines - 1)
             position = len([gene for gene in chromosome if gene[
-                1] == machine])  # Counts the number of existing genes (jobs) on the same machine within the chromosome
+                1] == machine])
             chromosome.append([job.job_id, machine, position])
         population.append(chromosome)
 
-    #print(f"Initial Population: {population}")
     return population
 
 
@@ -261,7 +260,6 @@ def crossover(parent1, parent2):
 
 # Apply mutation to the chromosome (Shuffle job ids)
 def mutate(chromosome, mutation_rate):
-    #print(f"Chromosome before mutation: {chromosome}")
     mutated_chromosome = chromosome[:]
 
     job_ids = [gene[0] for gene in chromosome]
@@ -269,13 +267,12 @@ def mutate(chromosome, mutation_rate):
     if random.random() < mutation_rate:
         mutated_chromosome = []
         for gene in chromosome:
-            #print(f"Mutation in progress...")
+
             random_index = random.randint(0, len(job_ids) - 1)
             job_id = job_ids[random_index]
             mutated_gene = [job_id, gene[1], gene[2]]
             job_ids.remove(job_id)
             mutated_chromosome.append(mutated_gene)
-    #print(f"Chromosome after mutation: {mutated_chromosome}")
     return mutated_chromosome
 
 

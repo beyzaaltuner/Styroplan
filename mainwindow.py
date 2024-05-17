@@ -533,13 +533,13 @@ ORDER BY CAST(s.AUFNR AS varchar(50)) ASC''')
     def get_selected_dates_2(self):
         print("Selected Dates:")
         for date in self.selected_dates_2:
-            print(date.toString("yyyy-MM-dd"))
+            print(date.toString("yyyy-MM-dd 00:00:00.000"))
 
         print("Deselected Dates:")
         for date in self.deselected_dates_2:
             print(date.toString("yyyy-MM-dd"))
 
-    # DO WE NEED THIS?
+
     def reset_calendar_2(self):
         for date in self.selected_dates_2:
             self.calendarWidget_2.setDateTextFormat(date, QTextCharFormat())
@@ -776,10 +776,10 @@ WHERE (CAST(m.PARCA_KODU AS varchar(50)) = {}'''.format(entered_input))
             where_clauses.append("(" + where_clause_type + ")")
 
         if selected_montaj_ihtiyac_tarihi:
-            self.get_selected_dates_2()  # To print selected dates
-            where_clause_montaj_ihtiyac_tarihi = " OR ".join(
-                ["s.PTARIH  = '{}'".format(value) for value in selected_montaj_ihtiyac_tarihi])
-            # where_clauses.append("(" + where_clause_montaj_ihtiyac_tarihi + ")")
+            where_clause_montaj_ihtiyac_tarihi = " AND ".join(
+                ["s.PTARIH = '{}'".format(value.toString("yyyy-MM-dd")) for value in
+                 selected_montaj_ihtiyac_tarihi])
+            where_clauses.append("(" + where_clause_montaj_ihtiyac_tarihi + ")")
 
         # Join all WHERE clauses with 'AND' to ensure all conditions must be met
         full_where_clause = " AND ".join(where_clauses)
@@ -828,7 +828,7 @@ INNER JOIN PLAN_MAKINELER m ON CAST(m.PARCA_KODU AS varchar(50)) = CAST(b.MATNR 
         df = pd.DataFrame(data, columns=self.arranged_table_column_names)
 
         # Export DataFrame to Excel
-        excel_file_path = 'output.xlsx'  # Path to save the Excel file
+        excel_file_path = 'plan.xlsx'  # Path to save the Excel file
         df.to_excel(excel_file_path, index=False)
 
         print("Data exported to Excel successfully!")
