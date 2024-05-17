@@ -3,10 +3,9 @@ from job_creator.jobsFromDb import *
 
 class Machine:
     # To generate sequentially increasing machine IDs
-    machine_id_count = 0
-    def __init__(self):
-        Machine.machine_id_count += 1
-        self.machine_id = Machine.machine_id_count
+
+    def __init__(self, id):
+        self.machine_id = id
         self.finish_time = 0
         self.jobs_queue = []
 
@@ -80,6 +79,7 @@ def greedy_algorithm(jobs, machines,calculate_setup_time_func):
 
     # Dictionary to store start and finish times for each job
     job_times = {}
+    final_solution = []
 
     for job in sorted_jobs:
         best_machine = None
@@ -97,56 +97,55 @@ def greedy_algorithm(jobs, machines,calculate_setup_time_func):
         # Assign the job to the best machine
         best_machine.jobs_queue.append(job)
         best_machine.finish_time = min_finish_time
-        job.job_finish_time = min_finish_time
+
 
         # Calculate start time considering previous job
         job_start_time = best_machine.finish_time - job.processing_time
+        final_solution.append([job.job_id, best_machine.machine_id, len(best_machine.jobs_queue) - 1])
 
         # Store start and finish times for the job
-        job_times[job.job_id] = {
-            'start_time': job_start_time,
-            'finish_time': min_finish_time,
-            'tardiness': max(0, min_finish_time - job.deadline)
-        }
+        job_times[(best_machine.machine_id, len(best_machine.jobs_queue) - 1)] = (
+            job_start_time,
+            min_finish_time,
+            max(0, min_finish_time - job.deadline),
+            job.job_id
+    )
 
-
-    total_tardiness = sum(job_times[job_id]['tardiness'] for job_id in job_times)
+    total_tardiness = sum(max(0, job_times[key][1] - job.deadline) for key in job_times)
 
     # Print start and finish times with tardiness for each job
     print("Job Schedule:")
-    for job_id, times in job_times.items():
+    for machine_id, position in job_times.keys():
+        times = job_times[(machine_id, position)]  # Access tuple elements by index
         print(
-            f"Job {job_id}: Start Time: {times['start_time']}, Finish Time: {times['finish_time']}, Tardiness: {times['tardiness']}")
-
-    return total_tardiness
-
-if __name__ == "__main__":
-    num_machines_erl = 3
-    num_machines_kz = 8
-    num_machines_xl = 4
-    # Example implementation
-    jobs_erl = jobs_list_erl
-    jobs_kz = jobs_list_kz
-    jobs_xl = jobs_list_xl
+            f"Job {times[3]}: Start Time: {times[0]}, End Time: {times[1]}, Tardiness: {times[2]}")
+    print(final_solution)
+    print(job_times)
+    print(total_tardiness)
+    return final_solution, job_times, total_tardiness
 
 
-    machines_erl = [Machine() for _ in range(num_machines_erl)]
-    tardiness_erl = greedy_algorithm(jobs_erl, machines_erl, calculate_setup_time_change_ERL)
-    print("Total tardiness for ERL:", tardiness_erl)
-    print("Jobs in machines for ERL: ")
-    for machine in machines_erl:
-        machine.display_queue()
+num_machines_erl = 3
+num_machines_kz = 8
+num_machines_xl = 4
 
-    machines_kz = [Machine() for _ in range(num_machines_kz)]
-    tardiness_kz = greedy_algorithm(jobs_kz, machines_kz, calculate_setup_time_change_KZ)
-    print("Total tardiness for KZ:", tardiness_kz)
-    print("Jobs in machines for KZ: ")
-    for machine in machines_kz:
-        machine.display_queue()
+jobs_erl = jobs_list_erl
+jobs_kz = jobs_list_kz
+jobs_xl = jobs_list_xl
 
-    machines_xl = [Machine() for _ in range(num_machines_xl)]
-    tardiness_xl = greedy_algorithm(jobs_xl, machines_xl, calculate_setup_time_change_XL)
-    print("Total tardiness for XL:", tardiness_xl)
-    print("Jobs in machines for XL: ")
-    for machine in machines_xl:
-        machine.display_queue()
+    # Create machines for each type
+machines_erl = [Machine(value) for value in range(num_machines_erl)]
+machines_kz = [Machine(value) for value in range(num_machines_kz)]
+machines_xl = [Machine(value) for value in range(num_machines_xl)]
+
+
+    # Call greedy algorithm for each type of job
+final_solution_erl, job_times_greedy_erl, total_tardiness_erl = greedy_algorithm(jobs_erl, machines_erl, calculate_setup_time_change_ERL)
+final_solution_kz, job_times_greedy_kz, total_tardiness_kz = greedy_algorithm(jobs_kz, machines_kz, calculate_setup_time_change_KZ)
+final_solution_xl, job_times_greedy_xl, total_tardiness_xl = greedy_algorithm(jobs_xl, machines_xl, calculate_setup_time_change_XL)
+
+
+
+
+
+

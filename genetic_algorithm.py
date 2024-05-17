@@ -343,12 +343,13 @@ def genetic_algorithm(population_size, mutation_rate, max_generations, num_machi
 
     best_solution_index = fitness_scores.index(min(fitness_scores))
     best_solution = population[best_solution_index]
+    tardiness = calculate_fitness(best_solution, machines, calculate_setup_time_func)
     print(
         f"Total tardiness in the found solution: {calculate_fitness(best_solution, machines, calculate_setup_time_func)}")
 
     job_times = calculate_start_and_end_times(best_solution, machines, calculate_setup_time_func)
 
-    return best_solution, job_times  # Return both the best solution and job times
+    return best_solution, job_times, tardiness # Return both the best solution and job times
 
 
 
@@ -405,20 +406,23 @@ jobs_erl = jobs_list_erl
 jobs_kz = jobs_list_kz
 jobs_xl = jobs_list_xl
 
-best_solution_erl, job_times_erl = genetic_algorithm(population_size, mutation_rate, max_generations, num_machines_erl,
+best_solution_erl, job_times_erl, tardiness_erl = genetic_algorithm(population_size, mutation_rate, max_generations, num_machines_erl,
                                                      jobs_erl, calculate_setup_time_change_ERL)
 print("Best solution for ERL:", best_solution_erl)
 print("Job times for ERL:", job_times_erl)
+print("Tardiness for ERL:", tardiness_erl)
 
-best_solution_kz, job_times_kz = genetic_algorithm(population_size, mutation_rate, max_generations, num_machines_kz,
+best_solution_kz, job_times_kz, tardiness_kz = genetic_algorithm(population_size, mutation_rate, max_generations, num_machines_kz,
                                                    jobs_kz, calculate_setup_time_change_KZ)
 print("Best solution for KZ:", best_solution_kz)
 print("Job times for KZ:", job_times_kz)
+print("Tardiness for KZ:", tardiness_kz)
 
-best_solution_xl, job_times_xl = genetic_algorithm(population_size, mutation_rate, max_generations, num_machines_xl,
+best_solution_xl, job_times_xl, tardiness_xl = genetic_algorithm(population_size, mutation_rate, max_generations, num_machines_xl,
                                                    jobs_xl, calculate_setup_time_change_XL)
 print("Best solution for XL:", best_solution_xl)
 print("Job times for XL:", job_times_xl)
+print("Tardiness for XL:", tardiness_xl)
 
 
 

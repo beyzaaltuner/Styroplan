@@ -4,6 +4,7 @@ from PySide6.QtWidgets import QWidget, QMainWindow, QPushButton, QCheckBox, QCal
 from PySide6.QtGui import QTextCharFormat, QStandardItemModel, QStandardItem
 
 from genetic_algorithm import *
+from greedy_algorithm import *
 from ui_interface import Ui_MainWindow
 import pandas as pd
 from openpyxl.workbook import Workbook
@@ -254,11 +255,10 @@ ORDER BY CAST(s.AUFNR AS varchar(50)) ASC''')
         self.arranged_table.setModel(self.arranged_table_model)
 
         #Fill Stock Table
-        stock_table_columns = ['Hafta', 'Hat', 'Operasyon Başlangıcı', 'İş Yükü', 'Ürün Kodu', 'Ürün Grubu',
-                               'Orijinal Miktar', 'Bakiye Miktarı', 'Strafor Top Kodu', 'Strafor Top Tanımı',
+        stock_table_columns = ['Hafta', 'Hat', 'Operasyon Başlangıcı', 'İş Yükü', 'Ürün Kodu', 'Bakiye Miktarı', 'Strafor Top Kodu', 'Strafor Top Tanımı',
                                'Strafor Top Stok', 'Strafor Bottom Kodu', 'Strafor Bottom Stok']
-        cursor.execute(
-            "SELECT TOP 50 WERKS, MATNR, LABST,ERFMG,ERFMGCO1P, LBLAB,INSME,MIKTAR, MENGE, STOK, NAKIL, MENGEKONS, ERP_TABLE_NAME FROM SAP_STOK_BILGI")
+        cursor.execute('''SELECT Hafta, Hat, Operasyon_Başlangıcı, İş_Yükü, Ürün_Kodu, Bakiye_Miktarı, Strafor_Top_Kodu, Strafor_Top_Tanımı,
+                               Strafor_Top_Stok, Strafor_Bottom_Kodu, Strafor_Bottom_Stok FROM SUFFICIENCY_REPORT''')
         stock_table_data = cursor.fetchall()
 
         for row in stock_table_data:
@@ -271,23 +271,44 @@ ORDER BY CAST(s.AUFNR AS varchar(50)) ASC''')
 
     def init_machine_table_data(self):
         # Initialize machine table data
-        best_solution_xl, job_times_xl = genetic_algorithm(population_size, mutation_rate, max_generations,
+        best_solution_xl, job_times_xl, tardiness_xl = genetic_algorithm(population_size, mutation_rate, max_generations,
                                                            num_machines_xl,
                                                            jobs_xl, calculate_setup_time_change_XL)
-        organized_jobs_xl = self.organize_jobs_by_machine(best_solution_xl, job_times_xl)
-        self.machine_table_data_xl = self.prepare_machine_table_data(organized_jobs_xl, jobs_list_xl)
+        final_solution_xl, job_times_greedy_xl_, total_tardiness_xl = greedy_algorithm(jobs_xl, machines_xl, calculate_setup_time_change_XL)
 
-        best_solution_kz, job_times_kz = genetic_algorithm(population_size, mutation_rate, max_generations,
+        if tardiness_xl <= total_tardiness_xl:
+            organized_jobs_xl = self.organize_jobs_by_machine(best_solution_xl, job_times_xl)
+            self.machine_table_data_xl = self.prepare_machine_table_data(organized_jobs_xl, jobs_list_xl)
+        else:
+            organized_jobs_xl = self.organize_jobs_by_machine(final_solution_xl, job_times_greedy_xl)
+            self.machine_table_data_xl = self.prepare_machine_table_data(organized_jobs_xl, jobs_list_xl)
+
+
+        best_solution_kz, job_times_kz, tardiness_kz = genetic_algorithm(population_size, mutation_rate, max_generations,
                                                            num_machines_kz,
                                                            jobs_kz, calculate_setup_time_change_KZ)
-        organized_jobs_kz = self.organize_jobs_by_machine(best_solution_kz, job_times_kz)
-        self.machine_table_data_kz = self.prepare_machine_table_data(organized_jobs_kz, jobs_list_kz)
+        final_solution_kz, job_times_greedy_kz, total_tardiness_kz = greedy_algorithm(jobs_kz, machines_kz, calculate_setup_time_change_KZ)
 
-        best_solution_erl, job_times_erl = genetic_algorithm(population_size, mutation_rate, max_generations,
+        if tardiness_kz <= total_tardiness_kz:
+            organized_jobs_kz = self.organize_jobs_by_machine(best_solution_kz, job_times_kz)
+            self.machine_table_data_kz = self.prepare_machine_table_data(organized_jobs_kz, jobs_list_kz)
+        else:
+            organized_jobs_kz = self.organize_jobs_by_machine(final_solution_kz, job_times_greedy_kz)
+            self.machine_table_data_kz = self.prepare_machine_table_data(organized_jobs_kz, jobs_list_kz)
+
+
+        best_solution_erl, job_times_erl, tardiness_erl = genetic_algorithm(population_size, mutation_rate, max_generations,
                                                              num_machines_erl,
                                                              jobs_erl, calculate_setup_time_change_ERL)
-        organized_jobs_erl = self.organize_jobs_by_machine(best_solution_erl, job_times_erl)
-        self.machine_table_data_erl = self.prepare_machine_table_data(organized_jobs_erl, jobs_list_erl)
+        final_solution_erl, job_times_greedy_erl, total_tardiness_erl = greedy_algorithm(jobs_erl, machines_erl, calculate_setup_time_change_ERL)
+        if tardiness_erl <= total_tardiness_erl:
+            organized_jobs_erl = self.organize_jobs_by_machine(best_solution_erl, job_times_erl)
+            self.machine_table_data_erl = self.prepare_machine_table_data(organized_jobs_erl, jobs_list_erl)
+        else:
+            organized_jobs_erl = self.organize_jobs_by_machine(final_solution_erl, job_times_greedy_erl)
+            self.machine_table_data_erl = self.prepare_machine_table_data(organized_jobs_erl, jobs_list_erl)
+
+
 
     def organize_jobs_by_machine(self, solution, job_times):
         from collections import defaultdict
