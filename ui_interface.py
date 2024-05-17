@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'interfaceoRLRsN.ui'
+## Form generated from reading UI file 'interfaceXHbbXP.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.0
 ##
@@ -26,7 +26,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(1055, 692)
+        MainWindow.resize(1065, 692)
         MainWindow.setStyleSheet(u"*{\n"
 "	background-color: #fff;\n"
 "}")
@@ -455,7 +455,7 @@ class Ui_MainWindow(object):
         self.unplanned_fltr_scroll_area.setWidgetResizable(True)
         self.scrollAreaWidgetContents_2 = QWidget()
         self.scrollAreaWidgetContents_2.setObjectName(u"scrollAreaWidgetContents_2")
-        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 228, 582))
+        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 228, 602))
         self.scrollAreaWidgetContents_2.setStyleSheet(u"padding: 0;")
         self.verticalLayout_17 = QVBoxLayout(self.scrollAreaWidgetContents_2)
         self.verticalLayout_17.setObjectName(u"verticalLayout_17")
@@ -494,7 +494,7 @@ class Ui_MainWindow(object):
 
         self.search_btn_2 = QPushButton(self.scrollAreaWidgetContents_2)
         self.search_btn_2.setObjectName(u"search_btn_2")
-        self.search_btn_2.setCursor(QCursor(Qt.PointingHandCursor))
+        self.search_btn_2.setCursor(QCursor(Qt.ArrowCursor))
         self.search_btn_2.setMouseTracking(True)
         self.search_btn_2.setStyleSheet(u"*{\n"
 "border: 1px solid #EEEEEE;\n"
@@ -502,14 +502,12 @@ class Ui_MainWindow(object):
 "padding: 4px;\n"
 "}\n"
 "\n"
-"*:hover{\n"
-"background-color: #EEEEEE;\n"
-"}")
+"")
         icon5 = QIcon()
         icon5.addFile(u":/icons/icons/search-red.png", QSize(), QIcon.Normal, QIcon.Off)
         self.search_btn_2.setIcon(icon5)
         self.search_btn_2.setIconSize(QSize(20, 20))
-        self.search_btn_2.setCheckable(True)
+        self.search_btn_2.setCheckable(False)
 
         self.horizontalLayout_10.addWidget(self.search_btn_2)
 
@@ -766,24 +764,36 @@ class Ui_MainWindow(object):
 
         self.type_check_boxes_2 = QWidget(self.scrollAreaWidgetContents_2)
         self.type_check_boxes_2.setObjectName(u"type_check_boxes_2")
-        self.type_check_boxes_2.setMinimumSize(QSize(0, 60))
+        self.type_check_boxes_2.setMinimumSize(QSize(0, 80))
         self.type_check_boxes_2.setStyleSheet(u"background-color: #EEEEEE;")
         self.gridLayout_4 = QGridLayout(self.type_check_boxes_2)
+        self.gridLayout_4.setSpacing(6)
         self.gridLayout_4.setObjectName(u"gridLayout_4")
-        self.type_checkBox_top_2 = QCheckBox(self.type_check_boxes_2)
-        self.type_checkBox_top_2.setObjectName(u"type_checkBox_top_2")
-
-        self.gridLayout_4.addWidget(self.type_checkBox_top_2, 0, 0, 1, 1)
-
+        self.gridLayout_4.setContentsMargins(9, 9, 9, 9)
         self.type_checkBox_bottom_2 = QCheckBox(self.type_check_boxes_2)
         self.type_checkBox_bottom_2.setObjectName(u"type_checkBox_bottom_2")
 
         self.gridLayout_4.addWidget(self.type_checkBox_bottom_2, 0, 1, 1, 1)
 
+        self.type_checkBox_top_2 = QCheckBox(self.type_check_boxes_2)
+        self.type_checkBox_top_2.setObjectName(u"type_checkBox_top_2")
+
+        self.gridLayout_4.addWidget(self.type_checkBox_top_2, 0, 0, 1, 1)
+
         self.type_checkBox_middle_2 = QCheckBox(self.type_check_boxes_2)
         self.type_checkBox_middle_2.setObjectName(u"type_checkBox_middle_2")
 
-        self.gridLayout_4.addWidget(self.type_checkBox_middle_2, 1, 0, 1, 2)
+        self.gridLayout_4.addWidget(self.type_checkBox_middle_2, 2, 0, 1, 2)
+
+        self.type_checkBox_front_2 = QCheckBox(self.type_check_boxes_2)
+        self.type_checkBox_front_2.setObjectName(u"type_checkBox_front_2")
+
+        self.gridLayout_4.addWidget(self.type_checkBox_front_2, 1, 0, 1, 1)
+
+        self.type_checkBox_back_2 = QCheckBox(self.type_check_boxes_2)
+        self.type_checkBox_back_2.setObjectName(u"type_checkBox_back_2")
+
+        self.gridLayout_4.addWidget(self.type_checkBox_back_2, 1, 1, 1, 1)
 
 
         self.verticalLayout_16.addWidget(self.type_check_boxes_2)
@@ -986,7 +996,7 @@ class Ui_MainWindow(object):
         self.planned_table_scroll_area.setWidgetResizable(True)
         self.scrollAreaWidgetContents_5 = QWidget()
         self.scrollAreaWidgetContents_5.setObjectName(u"scrollAreaWidgetContents_5")
-        self.scrollAreaWidgetContents_5.setGeometry(QRect(0, 0, 555, 5296))
+        self.scrollAreaWidgetContents_5.setGeometry(QRect(0, 0, 563, 5296))
         self.scrollAreaWidgetContents_5.setStyleSheet(u"")
         self.verticalLayout_56 = QVBoxLayout(self.scrollAreaWidgetContents_5)
         self.verticalLayout_56.setObjectName(u"verticalLayout_56")
@@ -1298,7 +1308,7 @@ class Ui_MainWindow(object):
         self.planned_fltr_scroll_area.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 228, 832))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 178, 602))
         self.verticalLayout_14 = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_14.setObjectName(u"verticalLayout_14")
         self.verticalLayout_14.setContentsMargins(0, -1, 0, -1)
@@ -1334,19 +1344,17 @@ class Ui_MainWindow(object):
 
         self.search_btn = QPushButton(self.scrollAreaWidgetContents)
         self.search_btn.setObjectName(u"search_btn")
-        self.search_btn.setCursor(QCursor(Qt.PointingHandCursor))
+        self.search_btn.setCursor(QCursor(Qt.ArrowCursor))
         self.search_btn.setStyleSheet(u"*{\n"
 "border: 1px solid #EEEEEE;\n"
 "border-radius: 5px;\n"
 "padding: 4px;\n"
 "}\n"
 "\n"
-"*:hover{\n"
-"background-color: #EEEEEE;\n"
-"}")
+"")
         self.search_btn.setIcon(icon5)
         self.search_btn.setIconSize(QSize(20, 20))
-        self.search_btn.setCheckable(True)
+        self.search_btn.setCheckable(False)
 
         self.horizontalLayout_11.addWidget(self.search_btn)
 
@@ -1587,95 +1595,6 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_13.addWidget(self.kalip_genisligi_check_boxes)
 
-        self.montaj_ihtiyac_widget = QWidget(self.scrollAreaWidgetContents)
-        self.montaj_ihtiyac_widget.setObjectName(u"montaj_ihtiyac_widget")
-        self.montaj_ihtiyac_widget.setMinimumSize(QSize(0, 40))
-        self.montaj_ihtiyac_widget.setStyleSheet(u"*{\n"
-"border:none;\n"
-"padding: 10px 5px;\n"
-"height: 40px;\n"
-"}\n"
-"\n"
-"*:hover{\n"
-"background-color: #EEEEEE;\n"
-"}")
-        self.horizontalLayout_31 = QHBoxLayout(self.montaj_ihtiyac_widget)
-        self.horizontalLayout_31.setSpacing(0)
-        self.horizontalLayout_31.setObjectName(u"horizontalLayout_31")
-        self.horizontalLayout_31.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_30 = QHBoxLayout()
-        self.horizontalLayout_30.setSpacing(0)
-        self.horizontalLayout_30.setObjectName(u"horizontalLayout_30")
-        self.montaj_ihtiyac_fltr_label_btn = QPushButton(self.montaj_ihtiyac_widget)
-        self.montaj_ihtiyac_fltr_label_btn.setObjectName(u"montaj_ihtiyac_fltr_label_btn")
-        sizePolicy.setHeightForWidth(self.montaj_ihtiyac_fltr_label_btn.sizePolicy().hasHeightForWidth())
-        self.montaj_ihtiyac_fltr_label_btn.setSizePolicy(sizePolicy)
-        self.montaj_ihtiyac_fltr_label_btn.setFont(font3)
-        self.montaj_ihtiyac_fltr_label_btn.setCursor(QCursor(Qt.PointingHandCursor))
-        self.montaj_ihtiyac_fltr_label_btn.setStyleSheet(u"*{\n"
-"border: none;\n"
-"text-align: left;\n"
-"padding-left: 5px;\n"
-"height: 30px;\n"
-"}")
-        self.montaj_ihtiyac_fltr_label_btn.setCheckable(True)
-
-        self.horizontalLayout_30.addWidget(self.montaj_ihtiyac_fltr_label_btn)
-
-        self.horizontalSpacer_18 = QSpacerItem(0, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_30.addItem(self.horizontalSpacer_18)
-
-        self.montaj_ihtiyac_fltr_icon_btn = QPushButton(self.montaj_ihtiyac_widget)
-        self.montaj_ihtiyac_fltr_icon_btn.setObjectName(u"montaj_ihtiyac_fltr_icon_btn")
-        self.montaj_ihtiyac_fltr_icon_btn.setCursor(QCursor(Qt.PointingHandCursor))
-        self.montaj_ihtiyac_fltr_icon_btn.setStyleSheet(u"border: none;\n"
-"height: 30px;")
-        self.montaj_ihtiyac_fltr_icon_btn.setIcon(icon6)
-        self.montaj_ihtiyac_fltr_icon_btn.setCheckable(True)
-
-        self.horizontalLayout_30.addWidget(self.montaj_ihtiyac_fltr_icon_btn)
-
-
-        self.horizontalLayout_31.addLayout(self.horizontalLayout_30)
-
-
-        self.verticalLayout_13.addWidget(self.montaj_ihtiyac_widget)
-
-        self.montaj_ihtiyac_calendar_widget = QWidget(self.scrollAreaWidgetContents)
-        self.montaj_ihtiyac_calendar_widget.setObjectName(u"montaj_ihtiyac_calendar_widget")
-        self.montaj_ihtiyac_calendar_widget.setMinimumSize(QSize(0, 210))
-        self.montaj_ihtiyac_calendar_widget.setStyleSheet(u"background-color: #EEEEEE;")
-        self.horizontalLayout_42 = QHBoxLayout(self.montaj_ihtiyac_calendar_widget)
-        self.horizontalLayout_42.setSpacing(0)
-        self.horizontalLayout_42.setObjectName(u"horizontalLayout_42")
-        self.horizontalLayout_42.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_41 = QHBoxLayout()
-        self.horizontalLayout_41.setSpacing(0)
-        self.horizontalLayout_41.setObjectName(u"horizontalLayout_41")
-        self.horizontalLayout_41.setContentsMargins(-1, 5, -1, 5)
-        self.horizontalSpacer_27 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_41.addItem(self.horizontalSpacer_27)
-
-        self.calendarWidget = QCalendarWidget(self.montaj_ihtiyac_calendar_widget)
-        self.calendarWidget.setObjectName(u"calendarWidget")
-        self.calendarWidget.setStyleSheet(u"background-color: #fff;\n"
-"color: black;")
-        self.calendarWidget.setVerticalHeaderFormat(QCalendarWidget.VerticalHeaderFormat.NoVerticalHeader)
-
-        self.horizontalLayout_41.addWidget(self.calendarWidget)
-
-        self.horizontalSpacer_28 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_41.addItem(self.horizontalSpacer_28)
-
-
-        self.horizontalLayout_42.addLayout(self.horizontalLayout_41)
-
-
-        self.verticalLayout_13.addWidget(self.montaj_ihtiyac_calendar_widget)
-
         self.type_widget = QWidget(self.scrollAreaWidgetContents)
         self.type_widget.setObjectName(u"type_widget")
         self.type_widget.setMinimumSize(QSize(0, 40))
@@ -1733,7 +1652,7 @@ class Ui_MainWindow(object):
 
         self.type_check_boxes = QWidget(self.scrollAreaWidgetContents)
         self.type_check_boxes.setObjectName(u"type_check_boxes")
-        self.type_check_boxes.setMinimumSize(QSize(0, 60))
+        self.type_check_boxes.setMinimumSize(QSize(0, 80))
         self.type_check_boxes.setStyleSheet(u"background-color: #EEEEEE;")
         self.gridLayout_5 = QGridLayout(self.type_check_boxes)
         self.gridLayout_5.setObjectName(u"gridLayout_5")
@@ -1750,7 +1669,17 @@ class Ui_MainWindow(object):
         self.type_checkBox_middle = QCheckBox(self.type_check_boxes)
         self.type_checkBox_middle.setObjectName(u"type_checkBox_middle")
 
-        self.gridLayout_5.addWidget(self.type_checkBox_middle, 1, 0, 1, 1)
+        self.gridLayout_5.addWidget(self.type_checkBox_middle, 2, 0, 1, 1)
+
+        self.type_checkBox_front = QCheckBox(self.type_check_boxes)
+        self.type_checkBox_front.setObjectName(u"type_checkBox_front")
+
+        self.gridLayout_5.addWidget(self.type_checkBox_front, 1, 0, 1, 1)
+
+        self.type_checkBox_back = QCheckBox(self.type_check_boxes)
+        self.type_checkBox_back.setObjectName(u"type_checkBox_back")
+
+        self.gridLayout_5.addWidget(self.type_checkBox_back, 1, 1, 1, 1)
 
 
         self.verticalLayout_13.addWidget(self.type_check_boxes)
@@ -1848,26 +1777,6 @@ class Ui_MainWindow(object):
         self.arrange_table_btn.setCheckable(True)
 
         self.horizontalLayout_4.addWidget(self.arrange_table_btn)
-
-        self.disa_aktar_btn = QPushButton(self.planned_orders)
-        self.disa_aktar_btn.setObjectName(u"disa_aktar_btn")
-        self.disa_aktar_btn.setFont(font1)
-        self.disa_aktar_btn.setCursor(QCursor(Qt.PointingHandCursor))
-        self.disa_aktar_btn.setStyleSheet(u"*{\n"
-"border: none;\n"
-"border-radius:  4px;\n"
-"width: 90px;\n"
-"height: 30px;\n"
-"background-color: #222831;\n"
-"color: #fff;\n"
-"}\n"
-"\n"
-"*:hover{\n"
-"background-color: #31363f;\n"
-"}")
-        self.disa_aktar_btn.setCheckable(True)
-
-        self.horizontalLayout_4.addWidget(self.disa_aktar_btn)
 
 
         self.horizontalLayout_5.addLayout(self.horizontalLayout_4)
@@ -2027,8 +1936,6 @@ class Ui_MainWindow(object):
         self.kalip_genisligi_fltr_icon_btn.toggled.connect(self.kalip_genisligi_check_boxes.setVisible)
         self.kalip_genisligi_fltr_label_btn.toggled.connect(self.kalip_genisligi_fltr_icon_btn.setChecked)
         self.kalip_genisligi_fltr_icon_btn.toggled.connect(self.kalip_genisligi_fltr_label_btn.setChecked)
-        self.montaj_ihtiyac_fltr_label_btn.toggled.connect(self.montaj_ihtiyac_fltr_icon_btn.setChecked)
-        self.montaj_ihtiyac_fltr_icon_btn.toggled.connect(self.montaj_ihtiyac_fltr_label_btn.setChecked)
         self.kalip_genisligi_fltr_label_btn_2.toggled.connect(self.kalip_genisligi_check_boxes_2.setVisible)
         self.kalip_genisligi_fltr_icon_btn_2.toggled.connect(self.kalip_genisligi_check_boxes_2.setVisible)
         self.kalip_genisligi_fltr_label_btn_2.toggled.connect(self.kalip_genisligi_fltr_icon_btn_2.setChecked)
@@ -2037,9 +1944,6 @@ class Ui_MainWindow(object):
         self.montaj_ihtiyac_fltr_icon_btn_2.toggled.connect(self.montaj_ihtiyac_calendar_widget_2.setVisible)
         self.montaj_ihtiyac_fltr_label_btn_2.toggled.connect(self.montaj_ihtiyac_fltr_icon_btn_2.setChecked)
         self.montaj_ihtiyac_fltr_icon_btn_2.toggled.connect(self.montaj_ihtiyac_fltr_label_btn_2.setChecked)
-        self.montaj_ihtiyac_fltr_label_btn.toggled.connect(self.montaj_ihtiyac_calendar_widget.setVisible)
-        self.montaj_ihtiyac_fltr_icon_btn.toggled.connect(self.montaj_ihtiyac_calendar_widget.setVisible)
-        self.montaj_ihtiyac_fltr_icon_btn.toggled.connect(self.montaj_ihtiyac_fltr_label_btn.setChecked)
         self.type_fltr_label_btn_2.toggled.connect(self.type_check_boxes_2.setVisible)
         self.type_fltr_icon_btn_2.toggled.connect(self.type_check_boxes_2.setVisible)
         self.type_fltr_label_btn_2.toggled.connect(self.type_fltr_icon_btn_2.setChecked)
@@ -2089,9 +1993,11 @@ class Ui_MainWindow(object):
         self.montaj_ihtiyac_fltr_icon_btn_2.setText("")
         self.type_fltr_label_btn_2.setText(QCoreApplication.translate("MainWindow", u"Type", None))
         self.type_fltr_icon_btn_2.setText("")
-        self.type_checkBox_top_2.setText(QCoreApplication.translate("MainWindow", u"Top", None))
-        self.type_checkBox_bottom_2.setText(QCoreApplication.translate("MainWindow", u"Bottom", None))
-        self.type_checkBox_middle_2.setText(QCoreApplication.translate("MainWindow", u"Middle", None))
+        self.type_checkBox_bottom_2.setText(QCoreApplication.translate("MainWindow", u"BOTTOM", None))
+        self.type_checkBox_top_2.setText(QCoreApplication.translate("MainWindow", u"TOP", None))
+        self.type_checkBox_middle_2.setText(QCoreApplication.translate("MainWindow", u"MIDDLE", None))
+        self.type_checkBox_front_2.setText(QCoreApplication.translate("MainWindow", u"FRONT", None))
+        self.type_checkBox_back_2.setText(QCoreApplication.translate("MainWindow", u"BACK", None))
         self.uygula_btn_2.setText(QCoreApplication.translate("MainWindow", u"Uygula", None))
         self.planla_btn.setText(QCoreApplication.translate("MainWindow", u"Planla", None))
         self.planlanmis_siparis_label.setText(QCoreApplication.translate("MainWindow", u"Planlanm\u0131\u015f Strafor Sipari\u015fleri", None))
@@ -2143,18 +2049,17 @@ class Ui_MainWindow(object):
         self.kalip_genisligi_checkBox_M.setText(QCoreApplication.translate("MainWindow", u"M", None))
         self.kalip_genisligi_checkBox_L.setText(QCoreApplication.translate("MainWindow", u"L", None))
         self.kalip_genisligi_checkBox_ERL.setText(QCoreApplication.translate("MainWindow", u"ERL", None))
-        self.montaj_ihtiyac_fltr_label_btn.setText(QCoreApplication.translate("MainWindow", u"Montaj \u0130htiya\u00e7 Tarihi", None))
-        self.montaj_ihtiyac_fltr_icon_btn.setText("")
         self.type_fltr_label_btn.setText(QCoreApplication.translate("MainWindow", u"Type", None))
         self.type_fltr_icon_btn.setText("")
         self.type_checkBox_top.setText(QCoreApplication.translate("MainWindow", u"TOP", None))
         self.type_checkBox_bottom.setText(QCoreApplication.translate("MainWindow", u"BOTTOM", None))
         self.type_checkBox_middle.setText(QCoreApplication.translate("MainWindow", u"MIDDLE", None))
+        self.type_checkBox_front.setText(QCoreApplication.translate("MainWindow", u"FRONT", None))
+        self.type_checkBox_back.setText(QCoreApplication.translate("MainWindow", u"BACK", None))
         self.uygula_btn.setText(QCoreApplication.translate("MainWindow", u"Uygula", None))
-        self.arrange_table_btn.setText(QCoreApplication.translate("MainWindow", u"Tabloyu D\u00fczenle", None))
-        self.disa_aktar_btn.setText(QCoreApplication.translate("MainWindow", u"D\u0131\u015fa Aktar", None))
+        self.arrange_table_btn.setText(QCoreApplication.translate("MainWindow", u"D\u0131\u015fa Aktar", None))
         self.no_planned_order_label.setText(QCoreApplication.translate("MainWindow", u"Hen\u00fcz planlanm\u0131\u015f sipari\u015f bulunmamaktad\u0131r. ", None))
-        self.arrange_table_label.setText(QCoreApplication.translate("MainWindow", u"Tabloyu D\u00fczenle", None))
+        self.arrange_table_label.setText(QCoreApplication.translate("MainWindow", u"Dilerseniz sat\u0131rlar\u0131 s\u00fcr\u00fckleyerek planda de\u011fi\u015fiklik yapabilirsiniz.", None))
         self.kaydet_btn.setText(QCoreApplication.translate("MainWindow", u"Kaydet", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"Stok Raporlar\u0131", None))
     # retranslateUi

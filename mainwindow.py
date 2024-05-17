@@ -92,6 +92,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.menu_stock_btn.clicked.connect(self.change_page_to_stok_raporlari)
         self.menu_stock_btn_2.clicked.connect(self.change_page_to_stok_raporlari)
         self.planla_btn.clicked.connect(self.change_page_to_planned_orders)
+        self.planla_counter = 0
         self.arrange_table_btn.clicked.connect(self.change_page_to_arrange_tables)
         self.kaydet_btn.clicked.connect(self.export_to_excel)
 
@@ -100,9 +101,25 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.montaj_ihtiyac_calendar_widget_2.setVisible(False)
         self.kalip_genisligi_check_boxes.setVisible(False)
         self.makineler_check_boxes.setVisible(False)
-        self.montaj_ihtiyac_calendar_widget.setVisible(False)
         self.type_check_boxes.setVisible(False)
         self.type_check_boxes_2.setVisible(False)
+
+        # Make machines filter checkboxes checked initially
+        self.makineler_checkBox_KZ_1.setChecked(True)
+        self.makineler_checkBox_KZ_2.setChecked(True)
+        self.makineler_checkBox_KZ_3.setChecked(True)
+        self.makineler_checkBox_KZ_4.setChecked(True)
+        self.makineler_checkBox_KZ_5.setChecked(True)
+        self.makineler_checkBox_KZ_6.setChecked(True)
+        self.makineler_checkBox_KZ_7.setChecked(True)
+        self.makineler_checkBox_KZ_8.setChecked(True)
+        self.makineler_checkBox_KZ_XL_1.setChecked(True)
+        self.makineler_checkBox_KZ_XL_2.setChecked(True)
+        self.makineler_checkBox_KZ_XL_3.setChecked(True)
+        self.makineler_checkBox_KZ_XL_4.setChecked(True)
+        self.makineler_checkBox_ERL_1.setChecked(True)
+        self.makineler_checkBox_ERL_2.setChecked(True)
+        self.makineler_checkBox_ERL_3.setChecked(True)
 
         # Hovering over filter buttons
         self.kalip_genisligi_widget_2.installEventFilter(self)
@@ -114,9 +131,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.montaj_ihtiyac_widget_2.installEventFilter(self)
         self.montaj_ihtiyac_widget_2.setMouseTracking(True)
 
-        self.montaj_ihtiyac_widget.installEventFilter(self)
-        self.montaj_ihtiyac_widget.setMouseTracking(True)
-
         self.makineler_widget.installEventFilter(self)
         self.makineler_widget.setMouseTracking(True)
 
@@ -127,30 +141,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.type_widget.setMouseTracking(True)
 
         # Implementing filtering
-        self.uygula_btn_2.clicked.connect(self.get_selected_kalip_genisligi_2_checkboxes)
-        self.uygula_btn_2.clicked.connect(self.get_search_input_2)
-        self.uygula_btn_2.clicked.connect(self.get_selected_type_2_checkboxes)
-
         self.selected_dates_2 = []
         self.deselected_dates_2 = []
         self.calendarWidget_2.clicked.connect(self.toggled_date_selection_2)
-        self.uygula_btn_2.clicked.connect(self.get_selected_dates_2)
+        self.uygula_btn_2.clicked.connect(self.get_unplanned_filter_results)
 
-        #self.uygula_btn.clicked.connect(self.get_selected_kalip_genisligi_checkboxes)
-        #self.uygula_btn.clicked.connect(self.get_selected_makineler_checkboxes)
-        #self.uygula_btn.clicked.connect(self.get_search_input)
-        #self.uygula_btn.clicked.connect(self.get_selected_type_checkboxes)
+        #self.uygula_btn_2.clicked.connect(self.get_selected_kalip_genisligi_2_checkboxes)
+        #self.uygula_btn_2.clicked.connect(self.get_search_input_2)
+        #self.uygula_btn_2.clicked.connect(self.get_selected_type_2_checkboxes)
+
         self.uygula_btn.clicked.connect(self.update_table_models)
 
-
-        self.selected_dates = []
-        self.deselected_dates = []
-        self.calendarWidget.clicked.connect(self.toggled_date_selection)
-        self.uygula_btn.clicked.connect(self.get_selected_dates)
-
-        #Implementing sorting
-        self.planlanmamis_combobox.currentTextChanged.connect(self.get_selected_order_planlanmamis)
-        self.planlanmis_combobox.currentTextChanged.connect(self.get_selected_order_planlanmis)
 
 
 
@@ -225,14 +226,9 @@ ORDER BY CAST(s.AUFNR AS varchar(50)) ASC''')
 
         #Fill arrange tables
         self.arranged_table_column_names = ["Makine", "Parça Kodu", "Kalıp Raf No.", "Erkek Kalıp Raf No.", "Type",
-                                       "Kalıp Genişliği"]
+                                       "Kalıp Genişliği", "Başlangıç Tarihi - Saati", "Bitiş Tarihi - Saati", "Gecikme"]
 
-        cursor.execute(
-            "SELECT PARCA_KODU, PARCA_ADI, CYCLE_TIME, KALIP_RAF_NO, ERKEK_KALIP_RAF_NO, TYPE FROM PLAN_MAKINELER")
-        arrange_table_data = cursor.fetchall()
 
-        for row in arrange_table_data:
-            print(row)
 
         # Allow table arranging by drag and drop
         self.arranged_table.setSelectionBehavior(QTableView.SelectRows)
@@ -244,13 +240,36 @@ ORDER BY CAST(s.AUFNR AS varchar(50)) ASC''')
 
         self.arranged_table_model.setHorizontalHeaderLabels(self.arranged_table_column_names)
 
-        for row in arrange_table_data:
-            items = []
-            for item in row:
-                item = QStandardItem(str(item))
+        table_names = [self.machine_table_data_kz.get(0, []), self.machine_table_data_kz.get(1, []), self.machine_table_data_kz.get(2,[]), self.machine_table_data_kz.get(3,[]),
+                       self.machine_table_data_kz.get(4,[]), self.machine_table_data_kz.get(5,[]), self.machine_table_data_kz.get(6,[]), self.machine_table_data_kz.get(7,[]),
+                       self.machine_table_data_xl.get(0, []), self.machine_table_data_xl.get(1, []), self.machine_table_data_xl.get(2, []), self.machine_table_data_xl.get(3, []),
+                       self.machine_table_data_erl.get(0, []), self.machine_table_data_erl.get(1, []), self.machine_table_data_erl.get(2, [])]
+
+        empty_row_values = ['KZ-1', 'KZ-2', 'KZ-3', 'KZ-4','KZ-5', 'KZ-6', 'KZ-7', 'KZ-8', 'KZ-XL-1', 'KZ-XL-2', 'KZ-XL-3', 'KZ-XL-4',
+                            'ERL-1', 'ERL-2', 'ERL-3']
+
+
+
+        # Iterate through each table
+        for i, table_name in enumerate(table_names):
+            # Add an empty row before adding rows from each table
+            empty_row = [QStandardItem(empty_row_values[i]) if index == 0 else QStandardItem('') for index in
+                         range(len(self.arranged_table_column_names))]
+            for item in empty_row:
                 item.setDropEnabled(False)
-                items.append(item)
-            self.arranged_table_model.appendRow(items)
+            self.arranged_table_model.appendRow(empty_row)
+
+
+            table_data = table_name
+
+            # Iterate through rows of the current table data
+            for row in table_data:
+                items = []
+                for item in row:
+                    item = QStandardItem(str(item))
+                    item.setDropEnabled(False)
+                    items.append(item)
+                self.arranged_table_model.appendRow(items)
 
         self.arranged_table.setModel(self.arranged_table_model)
 
@@ -267,7 +286,7 @@ ORDER BY CAST(s.AUFNR AS varchar(50)) ASC''')
         self.stock_model = Custom_SQL_Table_Model(stock_table_data, stock_table_columns)
         self.stok_tablosu.setModel(self.stock_model)
 
-        conn.close()
+        #conn.close()
 
     def init_machine_table_data(self):
         # Initialize machine table data
@@ -375,9 +394,10 @@ ORDER BY CAST(s.AUFNR AS varchar(50)) ASC''')
 
     def change_page_to_planned_orders(self):
         if self.planla_btn.isChecked():
+            self.planla_counter += 1
             self.stackedWidget.setCurrentIndex(1)
             self.menu_planned_btn_2.setChecked(True)
-        else:
+        elif self.planla_counter == 0:
             self.change_page_to_no_planned_order()
 
     def change_page_to_no_planned_order(self):
@@ -406,6 +426,7 @@ ORDER BY CAST(s.AUFNR AS varchar(50)) ASC''')
     def get_search_input_2(self):
         text = self.search_input_2.text()
         print("Searching for: ", text)
+        return text
 
     def get_search_input(self):
         text = self.search_input.text()
@@ -429,6 +450,7 @@ ORDER BY CAST(s.AUFNR AS varchar(50)) ASC''')
             selected_checkboxes.append(self.kalip_genisligi_checkBox_ERL_2.text())
 
         print("Selected Kalip Genisligi Checkboxes:", selected_checkboxes)
+        return selected_checkboxes
 
     def get_selected_kalip_genisligi_checkboxes(self):
         # Getting values as string
@@ -487,44 +509,6 @@ ORDER BY CAST(s.AUFNR AS varchar(50)) ASC''')
         print("Selected Makineler Checkboxes:", selected_checkboxes)
         return selected_checkboxes
 
-    def toggled_date_selection(self, date):
-        if date in self.selected_dates:
-            self.selected_dates.remove(date)
-            self.deselected_dates.append(date)
-        else:
-            self.selected_dates.append(date)
-            if date in self.deselected_dates:
-                self.deselected_dates.remove(date)
-        self.highlight_selected_dates()
-
-    def highlight_selected_dates(self):
-        selected_date_format = QTextCharFormat()
-        selected_date_format.setBackground(Qt.gray)
-
-        deselected_date_format = QTextCharFormat()
-        deselected_date_format.setBackground(Qt.white)
-
-        for date in self.selected_dates:
-            self.calendarWidget.setDateTextFormat(date, selected_date_format)
-
-        for date in self.deselected_dates:
-            self.calendarWidget.setDateTextFormat(date, deselected_date_format)
-
-    def get_selected_dates(self):
-        print("Selected Dates:")
-        for date in self.selected_dates:
-            print(date.toString("yyyy-MM-dd"))
-
-        print("Deselected Dates:")
-        for date in self.deselected_dates:
-            print(date.toString("yyyy-MM-dd"))
-
-    # DO WE NEED THIS?
-    def reset_calendar(self):
-        for date in self.selected_dates:
-            self.calendarWidget.setDateTextFormat(date, QTextCharFormat())
-        self.calendarWidget.setSelectedDate(QDate.currentDate())
-        self.selected_dates = []
 
     def toggled_date_selection_2(self, date):
         if date in self.selected_dates_2:
@@ -577,7 +561,14 @@ ORDER BY CAST(s.AUFNR AS varchar(50)) ASC''')
         if self.type_checkBox_middle_2.isChecked():
             selected_checkboxes.append(self.type_checkBox_middle_2.text())
 
+        if self.type_checkBox_front_2.isChecked():
+            selected_checkboxes.append(self.type_checkBox_front_2.text())
+
+        if self.type_checkBox_back_2.isChecked():
+            selected_checkboxes.append(self.type_checkBox_back_2.text())
+
         print("Selected Type Checkboxes:", selected_checkboxes)
+        return selected_checkboxes
 
     def get_selected_type_checkboxes(self):
         # Getting values as string
@@ -586,11 +577,17 @@ ORDER BY CAST(s.AUFNR AS varchar(50)) ASC''')
         if self.type_checkBox_top.isChecked():
             selected_checkboxes.append(self.type_checkBox_top.text())
 
-        if self.type_checkBox_bottom_2.isChecked():
+        if self.type_checkBox_bottom.isChecked():
             selected_checkboxes.append(self.type_checkBox_bottom.text())
 
-        if self.type_checkBox_middle_2.isChecked():
+        if self.type_checkBox_middle.isChecked():
             selected_checkboxes.append(self.type_checkBox_middle.text())
+
+        if self.type_checkBox_front.isChecked():
+            selected_checkboxes.append(self.type_checkBox_front.text())
+
+        if self.type_checkBox_back.isChecked():
+            selected_checkboxes.append(self.type_checkBox_back.text())
 
         print("Selected Type Checkboxes:", selected_checkboxes)
         return selected_checkboxes
@@ -748,11 +745,74 @@ ORDER BY CAST(s.AUFNR AS varchar(50)) ASC''')
                                                   self.planlanmis_table_column_names)
         self.ERL_3_table_view.setModel(self.ERL_3_model)
 
-    def get_selected_order_planlanmamis(self, value):
-        print("Selected order for planlanmamis :", value)
+    def get_unplanned_filter_results(self):
+        entered_input = self.get_search_input_2()
+        selected_kalip_genisligi = self.get_selected_kalip_genisligi_2_checkboxes()
+        selected_type = self.get_selected_type_2_checkboxes()
+        selected_montaj_ihtiyac_tarihi = self.selected_dates_2
 
-    def get_selected_order_planlanmis(self, value):
-        print("Selected order for planlanmis :", value)
+        # Initialize empty lists to hold individual WHERE clauses
+        where_clauses = []
+
+        parca_kodu_count = 0
+        # Check if lists are empty
+        if entered_input != '':
+            cursor.execute('''SELECT COUNT(CAST(m.PARCA_KODU AS varchar(50))) AS PARCA_KODU
+FROM SAP_URT_SIP s
+INNER JOIN SAP_URT_BILESEN b ON CAST(b.AUFNR AS varchar(50)) = CAST(s.AUFNR AS varchar(50))
+INNER JOIN PLAN_MAKINELER m ON CAST(m.PARCA_KODU AS varchar(50)) = CAST(b.MATNR AS varchar(50))
+WHERE (CAST(m.PARCA_KODU AS varchar(50)) = {}'''.format(entered_input))
+            parca_kodu_count = cursor.fetchall()
+            if parca_kodu_count != 0:
+                where_clause_input = " AND ".join(
+                    ["(CAST(m.PARCA_KODU AS varchar(50))) = '{}'".format(entered_input)])
+                where_clauses.append("(" + where_clause_input + ")")
+
+        if selected_kalip_genisligi:
+            where_clause_kalip_genisligi = " AND ".join(
+                ["(CAST(m.KALIP_GENISLIGI AS varchar(50))) = '{}'".format(value) for value in selected_kalip_genisligi])
+            where_clauses.append("(" + where_clause_kalip_genisligi + ")")
+
+        # Check if selected_type list is not empty
+        if selected_type:
+            where_clause_type = " AND ".join(["(CAST(m.TYPE AS varchar(50))) = '{}'".format(value) for value in selected_type])
+            where_clauses.append("(" + where_clause_type + ")")
+
+        if selected_montaj_ihtiyac_tarihi:
+            self.get_selected_dates_2()  # To print selected dates
+            where_clause_montaj_ihtiyac_tarihi = " OR ".join(
+                ["s.PTARIH  = '{}'".format(value) for value in selected_montaj_ihtiyac_tarihi])
+            # where_clauses.append("(" + where_clause_montaj_ihtiyac_tarihi + ")")
+
+        # Join all WHERE clauses with 'AND' to ensure all conditions must be met
+        full_where_clause = " AND ".join(where_clauses)
+
+        # Construct the full SQL query
+        sql_query = '''SELECT TOP 50 CAST(m.PARCA_KODU AS varchar(50)) AS PARCA_KODU, s.PTARIH, m.CYCLE_TIME, m.KALIP_RAF_NO, m.ERKEK_KALIP_RAF_NO, m.TYPE,  m.KALIP_GENISLIGI
+FROM SAP_URT_SIP s
+INNER JOIN SAP_URT_BILESEN b ON CAST(b.AUFNR AS varchar(50)) = CAST(s.AUFNR AS varchar(50))
+INNER JOIN PLAN_MAKINELER m ON CAST(m.PARCA_KODU AS varchar(50)) = CAST(b.MATNR AS varchar(50))'''
+        if full_where_clause:
+            sql_query += " WHERE {}".format(full_where_clause)
+
+        cursor.execute(sql_query)
+        row_count = cursor.rowcount
+        if row_count != 0:
+            unordered_table_data = cursor.fetchall()
+
+        else:
+            unordered_table_data = [
+                ["No Result", "No Result", "No Result", "No Result", "No Result", "No Result", "No Result"]]
+
+        for row in unordered_table_data:
+            print(row)
+
+        planlanmamis_table_column_names = ["Parça Kodu", "Sipariş Teslim Tarihi", "Cycle Time", "Kalıp Raf No.",
+                                           "Erkek Kalıp Raf No.", "Type", "Kalıp Genişliği"]
+
+        self.unordered_model = Custom_SQL_Table_Model(unordered_table_data, planlanmamis_table_column_names)
+        self.tableView.setModel(self.unordered_model)
+
 
     def export_to_excel(self):
         # Get data from the table model
