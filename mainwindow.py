@@ -79,6 +79,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.planlanmis_combobox.setCurrentIndex(-1)
         self.planlanmis_combobox.setCurrentText("Sırala")
 
+        self.init_machine_table_data()
+
         # Connecting buttons to pages
         self.menu_unplanned_btn.clicked.connect(self.change_page_to_unplanned_orders)
         self.menu_unplanned_btn_2.clicked.connect(self.change_page_to_unplanned_orders)
@@ -131,10 +133,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.calendarWidget_2.clicked.connect(self.toggled_date_selection_2)
         self.uygula_btn_2.clicked.connect(self.get_selected_dates_2)
 
-        self.uygula_btn.clicked.connect(self.get_selected_kalip_genisligi_checkboxes)
+        #self.uygula_btn.clicked.connect(self.get_selected_kalip_genisligi_checkboxes)
         self.uygula_btn.clicked.connect(self.get_selected_makineler_checkboxes)
         self.uygula_btn.clicked.connect(self.get_search_input)
-        self.uygula_btn.clicked.connect(self.get_selected_type_checkboxes)
+        #self.uygula_btn.clicked.connect(self.get_selected_type_checkboxes)
+        self.uygula_btn.clicked.connect(self.update_table_models)
+
 
         self.selected_dates = []
         self.deselected_dates = []
@@ -145,23 +149,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.planlanmamis_combobox.currentTextChanged.connect(self.get_selected_order_planlanmamis)
         self.planlanmis_combobox.currentTextChanged.connect(self.get_selected_order_planlanmis)
 
-        best_solution_xl, job_times_xl = genetic_algorithm(population_size, mutation_rate, max_generations,
-                                                           num_machines_xl,
-                                                           jobs_xl, calculate_setup_time_change_XL)
-        organized_jobs_xl = self.organize_jobs_by_machine(best_solution_xl, job_times_xl)
-        machine_table_data_xl = self.prepare_machine_table_data(organized_jobs_xl, jobs_list_xl)
 
-        best_solution_kz, job_times_kz = genetic_algorithm(population_size, mutation_rate, max_generations,
-                                                           num_machines_kz,
-                                                           jobs_kz, calculate_setup_time_change_KZ)
-        organized_jobs_kz = self.organize_jobs_by_machine(best_solution_kz, job_times_kz)
-        machine_table_data_kz = self.prepare_machine_table_data(organized_jobs_kz, jobs_list_kz)
-
-        best_solution_erl, job_times_erl = genetic_algorithm(population_size, mutation_rate, max_generations,
-                                                             num_machines_erl,
-                                                             jobs_erl, calculate_setup_time_change_ERL)
-        organized_jobs_erl = self.organize_jobs_by_machine(best_solution_erl, job_times_erl)
-        machine_table_data_erl = self.prepare_machine_table_data(organized_jobs_erl, jobs_list_erl)
 
         # Fill Unordered Table
         planlanmamis_table_column_names = ["Parça Kodu", "Sipariş Teslim Tarihi", "Cycle Time", "Kalıp Raf No.",
@@ -179,53 +167,57 @@ ORDER BY CAST(s.AUFNR AS varchar(50)) ASC''')
         self.tableView.setModel(self.unordered_model)
 
         #Fill Ordered Tables
-        planlanmis_table_column_names = ["Sıra", "Parça Kodu", "Kalıp Raf No.", "Erkek Kalıp Raf No.", "Type",
+        self.planlanmis_table_column_names = ["Sıra", "Parça Kodu", "Kalıp Raf No.", "Erkek Kalıp Raf No.", "Type",
                                          "Kalıp Genişliği", "Başlangıç Tarihi - Saati", "Bitiş Tarihi - Saati",
                                          "Gecikme"]
 
-        self.kz_1_model = Custom_SQL_Table_Model(machine_table_data_kz.get(0, []), planlanmis_table_column_names)
+        self.kz_1_model = Custom_SQL_Table_Model(self.machine_table_data_kz.get(0, []), self.planlanmis_table_column_names)
         self.KZ_1_table_view.setModel(self.kz_1_model)
 
-        self.kz_2_model = Custom_SQL_Table_Model(machine_table_data_kz.get(1, []), planlanmis_table_column_names)
+        self.kz_2_model = Custom_SQL_Table_Model(self.machine_table_data_kz.get(1, []), self.planlanmis_table_column_names)
         self.KZ_2_table_view.setModel(self.kz_2_model)
 
-        self.kz_3_model = Custom_SQL_Table_Model(machine_table_data_kz.get(2, []), planlanmis_table_column_names)
+        self.kz_3_model = Custom_SQL_Table_Model(self.machine_table_data_kz.get(2, []), self.planlanmis_table_column_names)
         self.KZ_3_table_view.setModel(self.kz_3_model)
 
-        self.kz_4_model = Custom_SQL_Table_Model(machine_table_data_kz.get(3, []), planlanmis_table_column_names)
+        self.kz_4_model = Custom_SQL_Table_Model(self.machine_table_data_kz.get(3, []), self.planlanmis_table_column_names)
         self.KZ_4_table_view.setModel(self.kz_4_model)
 
-        self.kz_5_model = Custom_SQL_Table_Model(machine_table_data_kz.get(4, []), planlanmis_table_column_names)
+        self.kz_5_model = Custom_SQL_Table_Model(self.machine_table_data_kz.get(4, []), self.planlanmis_table_column_names)
         self.KZ_5_table_view.setModel(self.kz_5_model)
 
-        self.kz_6_model = Custom_SQL_Table_Model(machine_table_data_kz.get(5, []), planlanmis_table_column_names)
+        self.kz_6_model = Custom_SQL_Table_Model(self.machine_table_data_kz.get(5, []), self.planlanmis_table_column_names)
         self.KZ_6_table_view.setModel(self.kz_6_model)
 
-        self.kz_7_model = Custom_SQL_Table_Model(machine_table_data_kz.get(6, []), planlanmis_table_column_names)
+        self.kz_7_model = Custom_SQL_Table_Model(self.machine_table_data_kz.get(6, []), self.planlanmis_table_column_names)
         self.KZ_7_table_view.setModel(self.kz_7_model)
 
-        self.kz_8_model = Custom_SQL_Table_Model(machine_table_data_kz.get(7, []), planlanmis_table_column_names)
+        self.kz_8_model = Custom_SQL_Table_Model(self.machine_table_data_kz.get(7, []), self.planlanmis_table_column_names)
         self.KZ_8_table_view.setModel(self.kz_8_model)
 
-        self.kz_XL_1_model = Custom_SQL_Table_Model(machine_table_data_xl.get(0, []), planlanmis_table_column_names)
+        self.kz_XL_1_model = Custom_SQL_Table_Model(self.machine_table_data_xl.get(0, []),
+                                                    self.planlanmis_table_column_names)
         self.KZ_XL_1_table_view.setModel(self.kz_XL_1_model)
 
-        self.kz_XL_2_model = Custom_SQL_Table_Model(machine_table_data_xl.get(1, []), planlanmis_table_column_names)
+        self.kz_XL_2_model = Custom_SQL_Table_Model(self.machine_table_data_xl.get(1, []),
+                                                    self.planlanmis_table_column_names)
         self.KZ_XL_2_table_view.setModel(self.kz_XL_2_model)
 
-        self.kz_XL_3_model = Custom_SQL_Table_Model(machine_table_data_xl.get(2, []), planlanmis_table_column_names)
+        self.kz_XL_3_model = Custom_SQL_Table_Model(self.machine_table_data_xl.get(2, []),
+                                                   self.planlanmis_table_column_names)
         self.KZ_XL_3_table_view.setModel(self.kz_XL_3_model)
 
-        self.kz_XL_4_model = Custom_SQL_Table_Model(machine_table_data_xl.get(3, []), planlanmis_table_column_names)
+        self.kz_XL_4_model = Custom_SQL_Table_Model(self.machine_table_data_xl.get(3, []),
+                                                    self.planlanmis_table_column_names)
         self.KZ_XL_4_table_view.setModel(self.kz_XL_4_model)
 
-        self.ERL_1_model = Custom_SQL_Table_Model(machine_table_data_erl.get(0, []), planlanmis_table_column_names)
+        self.ERL_1_model = Custom_SQL_Table_Model(self.machine_table_data_erl.get(0, []), self.planlanmis_table_column_names)
         self.ERL_1_table_view.setModel(self.ERL_1_model)
 
-        self.ERL_2_model = Custom_SQL_Table_Model(machine_table_data_kz.get(1, []), planlanmis_table_column_names)
+        self.ERL_2_model = Custom_SQL_Table_Model(self.machine_table_data_kz.get(1, []), self.planlanmis_table_column_names)
         self.ERL_2_table_view.setModel(self.ERL_2_model)
 
-        self.ERL_3_model = Custom_SQL_Table_Model(machine_table_data_kz.get(2, []), planlanmis_table_column_names)
+        self.ERL_3_model = Custom_SQL_Table_Model(self.machine_table_data_kz.get(2, []), self.planlanmis_table_column_names)
         self.ERL_3_table_view.setModel(self.ERL_3_model)
 
         #Fill arrange tables
@@ -246,6 +238,7 @@ ORDER BY CAST(s.AUFNR AS varchar(50)) ASC''')
         self.arranged_table.setDragDropOverwriteMode(False)
 
         self.arranged_table_model = Arrange_Table_Model()
+
         self.arranged_table_model.setHorizontalHeaderLabels(arranged_table_column_names)
 
         for row in arrange_table_data:
@@ -273,6 +266,26 @@ ORDER BY CAST(s.AUFNR AS varchar(50)) ASC''')
         self.stok_tablosu.setModel(self.stock_model)
 
         conn.close()
+
+    def init_machine_table_data(self):
+        # Initialize machine table data
+        best_solution_xl, job_times_xl = genetic_algorithm(population_size, mutation_rate, max_generations,
+                                                           num_machines_xl,
+                                                           jobs_xl, calculate_setup_time_change_XL)
+        organized_jobs_xl = self.organize_jobs_by_machine(best_solution_xl, job_times_xl)
+        self.machine_table_data_xl = self.prepare_machine_table_data(organized_jobs_xl, jobs_list_xl)
+
+        best_solution_kz, job_times_kz = genetic_algorithm(population_size, mutation_rate, max_generations,
+                                                           num_machines_kz,
+                                                           jobs_kz, calculate_setup_time_change_KZ)
+        organized_jobs_kz = self.organize_jobs_by_machine(best_solution_kz, job_times_kz)
+        self.machine_table_data_kz = self.prepare_machine_table_data(organized_jobs_kz, jobs_list_kz)
+
+        best_solution_erl, job_times_erl = genetic_algorithm(population_size, mutation_rate, max_generations,
+                                                             num_machines_erl,
+                                                             jobs_erl, calculate_setup_time_change_ERL)
+        organized_jobs_erl = self.organize_jobs_by_machine(best_solution_erl, job_times_erl)
+        self.machine_table_data_erl = self.prepare_machine_table_data(organized_jobs_erl, jobs_list_erl)
 
     def organize_jobs_by_machine(self, solution, job_times):
         from collections import defaultdict
@@ -410,6 +423,7 @@ ORDER BY CAST(s.AUFNR AS varchar(50)) ASC''')
             selected_checkboxes.append(self.kalip_genisligi_checkBox_ERL.text())
 
         print("Selected Kalip Genisligi Checkboxes:", selected_checkboxes)
+        return selected_checkboxes
 
     def get_selected_makineler_checkboxes(self):
         # Getting values as string
@@ -447,6 +461,7 @@ ORDER BY CAST(s.AUFNR AS varchar(50)) ASC''')
             selected_checkboxes.append(self.makineler_checkBox_ERL_3.text())
 
         print("Selected Makineler Checkboxes:", selected_checkboxes)
+        return selected_checkboxes
 
     def toggled_date_selection(self, date):
         if date in self.selected_dates:
@@ -554,6 +569,101 @@ ORDER BY CAST(s.AUFNR AS varchar(50)) ASC''')
             selected_checkboxes.append(self.type_checkBox_middle.text())
 
         print("Selected Type Checkboxes:", selected_checkboxes)
+        return selected_checkboxes
+
+    def filter_machine_table_data(self, machine_table_data, selected_checkboxes_kalıp_genisligi, selected_checkboxes_type):
+        filtered_machine_table_data = {}
+        for machine, jobs in machine_table_data.items():
+            filtered_jobs = jobs  # Start with all jobs
+
+            if selected_checkboxes_kalıp_genisligi:
+                filtered_jobs = [job for job in filtered_jobs if job[5] in selected_checkboxes_kalıp_genisligi]
+
+            if selected_checkboxes_type:
+                filtered_jobs = [job for job in filtered_jobs if job[4] in selected_checkboxes_type]
+            filtered_machine_table_data[machine] = filtered_jobs
+        return filtered_machine_table_data
+    def update_table_models(self):
+        if self.machine_table_data_xl is None:
+            print("Error: machine_table_data_xl is not initialized properly.")
+            return
+        selected_checkboxes_kalıp_genisligi = self.get_selected_kalip_genisligi_checkboxes()
+        selected_checkboxes_type = self.get_selected_type_checkboxes()
+
+        # Filter the data
+        filtered_machine_table_data_xl = self.filter_machine_table_data(self.machine_table_data_xl,
+                                                                    selected_checkboxes_kalıp_genisligi,
+                                                                    selected_checkboxes_type
+                                                                    )
+        filtered_machine_table_data_kz = self.filter_machine_table_data(self.machine_table_data_kz,
+                                                                        selected_checkboxes_kalıp_genisligi,
+                                                                        selected_checkboxes_type
+                                                                        )
+        filtered_machine_table_data_erl = self.filter_machine_table_data(self.machine_table_data_erl,
+                                                                         selected_checkboxes_kalıp_genisligi,
+                                                                         selected_checkboxes_type
+                                                                         )
+
+        # Update table models
+        self.kz_1_model = Custom_SQL_Table_Model(filtered_machine_table_data_kz.get(0, []),
+                                                 self.planlanmis_table_column_names)
+        self.KZ_1_table_view.setModel(self.kz_1_model)
+
+        self.kz_2_model = Custom_SQL_Table_Model(filtered_machine_table_data_kz.get(1, []),
+                                                 self.planlanmis_table_column_names)
+        self.KZ_2_table_view.setModel(self.kz_2_model)
+
+        self.kz_3_model = Custom_SQL_Table_Model(filtered_machine_table_data_kz.get(2, []),
+                                                 self.planlanmis_table_column_names)
+        self.KZ_3_table_view.setModel(self.kz_3_model)
+
+        self.kz_4_model = Custom_SQL_Table_Model(filtered_machine_table_data_kz.get(3, []),
+                                                 self.planlanmis_table_column_names)
+        self.KZ_4_table_view.setModel(self.kz_4_model)
+
+        self.kz_5_model = Custom_SQL_Table_Model(filtered_machine_table_data_kz.get(4, []),
+                                                 self.planlanmis_table_column_names)
+        self.KZ_5_table_view.setModel(self.kz_5_model)
+
+        self.kz_6_model = Custom_SQL_Table_Model(filtered_machine_table_data_kz.get(5, []),
+                                                 self.planlanmis_table_column_names)
+        self.KZ_6_table_view.setModel(self.kz_6_model)
+
+        self.kz_7_model = Custom_SQL_Table_Model(filtered_machine_table_data_kz.get(6, []),
+                                                 self.planlanmis_table_column_names)
+        self.KZ_7_table_view.setModel(self.kz_7_model)
+
+        self.kz_8_model = Custom_SQL_Table_Model(filtered_machine_table_data_kz.get(7, []),
+                                                 self.planlanmis_table_column_names)
+        self.KZ_8_table_view.setModel(self.kz_8_model)
+
+        self.kz_XL_1_model = Custom_SQL_Table_Model(filtered_machine_table_data_xl.get(0, []),
+                                                    self.planlanmis_table_column_names)
+        self.KZ_XL_1_table_view.setModel(self.kz_XL_1_model)
+
+        self.kz_XL_2_model = Custom_SQL_Table_Model(filtered_machine_table_data_xl.get(1, []),
+                                                    self.planlanmis_table_column_names)
+        self.KZ_XL_2_table_view.setModel(self.kz_XL_2_model)
+
+        self.kz_XL_3_model = Custom_SQL_Table_Model(filtered_machine_table_data_xl.get(2, []),
+                                                    self.planlanmis_table_column_names)
+        self.KZ_XL_3_table_view.setModel(self.kz_XL_3_model)
+
+        self.kz_XL_4_model = Custom_SQL_Table_Model(filtered_machine_table_data_xl.get(1, []),
+                                                    self.planlanmis_table_column_names)
+        self.KZ_XL_4_table_view.setModel(self.kz_XL_4_model)
+
+        self.ERL_1_model = Custom_SQL_Table_Model(filtered_machine_table_data_erl.get(0, []),
+                                                  self.planlanmis_table_column_names)
+        self.ERL_1_table_view.setModel(self.ERL_1_model)
+
+        self.ERL_2_model = Custom_SQL_Table_Model(filtered_machine_table_data_erl.get(1, []),
+                                                  self.planlanmis_table_column_names)
+        self.ERL_2_table_view.setModel(self.ERL_2_model)
+
+        self.ERL_3_model = Custom_SQL_Table_Model(filtered_machine_table_data_erl.get(2, []),
+                                                  self.planlanmis_table_column_names)
+        self.ERL_3_table_view.setModel(self.ERL_3_model)
 
     def get_selected_order_planlanmamis(self, value):
         print("Selected order for planlanmamis :", value)
