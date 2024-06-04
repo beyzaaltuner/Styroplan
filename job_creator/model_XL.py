@@ -6,26 +6,17 @@ def max_zero(x):
 
 jobs_xl = jobs_list_xl
 data = {
-    'J': {},
-    'ID': {},  # Jobs id
+    'J': {1, 2, 3, 4, 5, 6, 7, 8, 9},
+    'ID': {1: 23575832, 2: 23477358, 3: 23799694, 4: 23799694, 5: 23469288, 6: 23469287, 7: 23364110, 8: 23525756, 9: 23364110},
     'ID_D': {1: 31, 2: 110, 3: 13, 4: 110, 5: 55, 6: 49, 7: 49, 8: 110, 9: 80},
     'ID_E': {1: 7, 2: 50, 3: 67, 4: 55, 5: 55, 6: 85, 7: 110, 8: 43, 9: 7},
     'ID_SIZE': {1: 1, 2: 1, 3: 3, 4: 1, 5: 3, 6: 3, 7: 3, 8: 1, 9: 2},
     'L': {"XL1", "XL2", "XL3", "XL4"},  # Machines
     'K': {1, 2, 3, 4, 5, 6, 7, 8, 9},  # Positions
-    'di': {},  # due dates
-    'pi': {},  # process times
+    'di': {1: 9, 2: 4, 3: 5, 4: 3, 5: 6, 6: 2, 7: 1, 8: 6, 9: 5},  # due dates
+    'pi': {1: 5, 2: 5, 3: 6, 4: 4, 5: 7, 6: 10, 7: 3, 8: 4, 9: 5},  # process times
 }
-job_ids = {job.job_id for job in jobs_xl}
-data['J'] = job_ids
 
-job_id_to_code = {job.job_id: job.code for job in jobs_xl}
-data['ID'] = job_id_to_code
-
-job_id_to_deadlines = {job.job_id : job.deadline for job in jobs_xl}
-
-job_id_to_process_times = {job.job_id : job.processing_time for job in jobs_xl}
-data['pi'] = job_id_to_process_times
 
 model = ConcreteModel()
 

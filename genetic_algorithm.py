@@ -41,8 +41,8 @@
 # Iterates over each gene in the chromosome
 
 import random
-import threading
-from collections import defaultdict
+import time
+
 from job_creator.jobsFromDb import *
 
 
@@ -278,12 +278,10 @@ def mutate(chromosome, mutation_rate):
 
 # Apply mutation to the chromosome (Shuffle positions in the same machine)
 def mutate2(chromosome, mutation_rate):
-    #print(f"Chromosome before mutation: {chromosome}")
     mutated_chromosome = chromosome[:]
     machine_assignments = {gene[1]: [] for gene in chromosome}
 
     if random.random() < mutation_rate:
-        #print(f"Mutation in progress...")
         # Gather job positions by machine
         for gene in chromosome:
             _, machine_id, position = gene
@@ -296,7 +294,6 @@ def mutate2(chromosome, mutation_rate):
                 if gene[1] == machine_id:
                     gene[2] = positions.pop(0)  # Assign shuffled positions back to genes
 
-    #print(f"Chromosome after mutation: {mutated_chromosome}")
     return mutated_chromosome
 
 
@@ -403,27 +400,40 @@ jobs_erl = jobs_list_erl
 jobs_kz = jobs_list_kz
 jobs_xl = jobs_list_xl
 
+start_time_erl = time.time()
 best_solution_erl, job_times_erl, tardiness_erl = genetic_algorithm(population_size, mutation_rate, max_generations, num_machines_erl,
                                                      jobs_erl, calculate_setup_time_change_ERL)
+end_time_erl = time.time()
 print("Best solution for ERL:", best_solution_erl)
 print("Job times for ERL:", job_times_erl)
 print("Tardiness for ERL:", tardiness_erl)
 
+start_time_kz= time.time()
 best_solution_kz, job_times_kz, tardiness_kz = genetic_algorithm(population_size, mutation_rate, max_generations, num_machines_kz,
                                                    jobs_kz, calculate_setup_time_change_KZ)
+end_time_kz= time.time()
+
 print("Best solution for KZ:", best_solution_kz)
 print("Job times for KZ:", job_times_kz)
 print("Tardiness for KZ:", tardiness_kz)
 
+start_time_xl = time.time()
 best_solution_xl, job_times_xl, tardiness_xl = genetic_algorithm(population_size, mutation_rate, max_generations, num_machines_xl,
                                                    jobs_xl, calculate_setup_time_change_XL)
+end_time_xl = time.time()
+
 print("Best solution for XL:", best_solution_xl)
 print("Job times for XL:", job_times_xl)
 print("Tardiness for XL:", tardiness_xl)
 
 
 
-
+time_elapsed_erl = end_time_erl - start_time_erl
+time_elapsed_kz = end_time_kz - start_time_kz
+time_elapsed_xl = end_time_xl - start_time_xl
+print("Time elapsed for ERL:", time_elapsed_erl, "seconds")
+print("Time elapsed for KZ:", time_elapsed_kz, "seconds")
+print("Time elapsed for XL:", time_elapsed_xl, "seconds")
 
 
 

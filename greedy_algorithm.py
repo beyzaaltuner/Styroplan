@@ -1,4 +1,5 @@
 from job_creator.jobsFromDb import *
+import time
 
 
 class Machine:
@@ -140,10 +141,26 @@ machines_xl = [Machine(value) for value in range(num_machines_xl)]
 
 
     # Call greedy algorithm for each type of job
+start_time_erl = time.time()
 final_solution_erl, job_times_greedy_erl, total_tardiness_erl = greedy_algorithm(jobs_erl, machines_erl, calculate_setup_time_change_ERL)
-final_solution_kz, job_times_greedy_kz, total_tardiness_kz = greedy_algorithm(jobs_kz, machines_kz, calculate_setup_time_change_KZ)
-final_solution_xl, job_times_greedy_xl, total_tardiness_xl = greedy_algorithm(jobs_xl, machines_xl, calculate_setup_time_change_XL)
+end_time_erl = time.time()
 
+time_elapsed_erl = end_time_erl - start_time_erl
+print("Time elapsed for ERL:", time_elapsed_erl, "seconds")
+
+start_time_kz= time.time()
+final_solution_kz, job_times_greedy_kz, total_tardiness_kz = greedy_algorithm(jobs_kz, machines_kz, calculate_setup_time_change_KZ)
+end_time_kz = time.time()
+
+time_elapsed_kz = end_time_kz - start_time_kz
+print("Time elapsed for KZ:", time_elapsed_kz, "seconds")
+
+start_time_xl = time.time()
+final_solution_xl, job_times_greedy_xl, total_tardiness_xl = greedy_algorithm(jobs_xl, machines_xl, calculate_setup_time_change_XL)
+end_time_xl = time.time()
+
+time_elapsed_xl = end_time_xl - start_time_xl
+print("Time elapsed for XL:", time_elapsed_xl, "seconds")
 
 
 

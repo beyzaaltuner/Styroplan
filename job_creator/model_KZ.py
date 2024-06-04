@@ -15,26 +15,19 @@ data = {
     'di': {1: 9, 2: 4, 3: 5, 4: 3, 5: 6, 6: 2, 7: 1, 8: 6, 9: 5},  # due dates
     'pi': {1: 5, 2: 5, 3: 6, 4: 4, 5: 7, 6: 10, 7: 3, 8: 4, 9: 5},  # process times
 }
-jobs_kz = jobs_list_kz
-data = {
-    'J': {},
-    'ID': {},
-    'L': {"ERL1", "ERL2", "ERL3"},
-    'K': {1, 2, 3, 4, 5, 6, 7, 8, 9},
-    'di': {},
-    'pi': {}
-}
-job_ids = {job.job_id for job in jobs_erl}
-data['J'] = job_ids
+#jobs_kz = jobs_list_kz
 
-job_id_to_code = {job.job_id: job.code for job in jobs_erl}
-data['ID'] = job_id_to_code
+#job_ids = {job.job_id for job in jobs_kz}
+#data['J'] = job_ids
 
-job_id_to_deadlines = {job.job_id : job.deadline for job in jobs_erl}
-data['di'] = job_id_to_deadlines
+#job_id_to_code = {job.job_id: job.code for job in jobs_kz}
+#data['ID'] = job_id_to_code
 
-job_id_to_process_times = {job.job_id : job.processing_time for job in jobs_erl}
-data['pi'] = job_id_to_process_times
+#job_id_to_deadlines = {job.job_id : job.deadline for job in jobs_kz}
+#data['di'] = job_id_to_deadlines
+
+#job_id_to_process_times = {job.job_id : job.processing_time for job in jobs_kz}
+#data['pi'] = job_id_to_process_times
 
 model = ConcreteModel()
 
