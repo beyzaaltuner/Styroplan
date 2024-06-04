@@ -7,7 +7,7 @@ from genetic_algorithm import *
 from greedy_algorithm import *
 from ui_interface import Ui_MainWindow
 import pandas as pd
-from openpyxl.workbook import Workbook
+
 
 import pyodbc as pyodbc
 from job_creator.jobsFromDb import *
